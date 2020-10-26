@@ -41,7 +41,7 @@ export default function NavBar({ children }) {
         <div className="site-layout-content">{children}</div>
       </Content>
       <Footer style={{ textAlign: "center" }}>
-        Ant Design ©2018 Created by Ant UED
+        SixthSense ©2020 Created by HKU
       </Footer>
     </Layout>
   );

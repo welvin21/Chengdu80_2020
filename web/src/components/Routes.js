@@ -6,13 +6,11 @@ import StockRoute from "./StockRoute";
 
 export default function Routes() {
   return (
-    <Router>
-      <NavBar>
-        <Switch>
-          <Route exact path="/" component={Dashboard} />
-          <Route exact path="/stocks" component={StockRoute} />
-        </Switch>
-      </NavBar>
-    </Router>
+  <NavBar>
+    <Switch>
+      <Route path="/stocks" component={StockRoute} />
+      <Route path="/" component={Dashboard} />
+    </Switch>
+  </NavBar>
   );
 }

@@ -16,12 +16,11 @@ const stockItems = [
   {
     ticker: "AAPL",
     name: "Apple",
-    route: "/stock/aapl",
+    route: "stocks/aapl",
   },
 ];
 
 const StockNavBar = ({ children }) => {
-    console.log(children)
   const [collapsed, setCollapsed] = useState(false);
   const onCollapse = (collapsed) => {
     setCollapsed(collapsed);

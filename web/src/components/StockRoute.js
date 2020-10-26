@@ -3,20 +3,20 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useRouteMatch,
 } from "react-router-dom";
 import StockNavBar from "./StockNavBar";
 import StockPage from "./StockPage";
 
 export default function StockRoute() {
-  let match = useRouteMatch();
-  console.log(`${match.path}/:id`);
+  const match = useRouteMatch();
   return (
     <StockNavBar>
       <Switch>
-        <Route exact path={`${match.path}/:id`} component={StockPage}/>
-        <Route exact path={match.path}>
+        <Route exact path={`${match.url}/aapl`}>
+          <StockPage />
+        </Route>
+        <Route exact path={`${match.url}/`}>
           <h3>Please select a topic.</h3>
         </Route>
       </Switch>
