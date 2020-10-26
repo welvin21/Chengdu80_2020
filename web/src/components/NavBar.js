@@ -25,7 +25,11 @@ export default function NavBar({ children }) {
     <Layout className="layout" style={{ minHeight: "100vh" }}>
       <Header>
         <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={currentRoute}>
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          defaultSelectedKeys={[currentRoute]}
+        >
           {menuItems.map((item) => (
             <Menu.Item key={item.route}>
               <Link to={item.route}>{item.name} </Link>
@@ -33,12 +37,7 @@ export default function NavBar({ children }) {
           ))}
         </Menu>
       </Header>
-      <Content style={{ padding: "0 50px" }}>
-        <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
+      <Content>
         <div className="site-layout-content">{children}</div>
       </Content>
       <Footer style={{ textAlign: "center" }}>
