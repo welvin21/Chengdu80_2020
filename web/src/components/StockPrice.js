@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Spin, Card, Input, Row, Col } from "antd";
+import { Typography, Slider } from "antd";
 import { StockPriceGraph } from "./StockPriceGraph";
 
-const { Search } = Input;
+const { Title, Text } = Typography;
 
 function usePrevious(value) {
   const ref = useRef();
@@ -19,12 +19,13 @@ export const StockPrice = ({ id }) => {
   const [prices, setPrices] = useState([]);
   const [predictionDates, setPredictionDates] = useState([]);
   const [predictionPrices, setPredictionPrices] = useState([]);
-  const [predictionPeriod, setPredictionPeriod] = useState();
+  const [predictionPeriod, setPredictionPeriod] = useState(0);
+  console.log({ predictionPeriod})
   useEffect(() => {
     if(prevId !== id){ 
-      setPredictionPeriod()
+      setPredictionPeriod(0);
+      setPredictionPrices([]);
     }
-    console.log(id);
     setLoading(true);
     setPrices([]);
     setPredictionPrices([]);
@@ -51,13 +52,13 @@ export const StockPrice = ({ id }) => {
             date.split(String.fromCharCode(47)).join("-")
           );
           const getPrices = [];
-          const getPredictionPrices = [];
           Object.keys(history).forEach((date) => getPrices.push(history[date]));
-          Object.keys(prediction).forEach((date) =>
+          setPrices(getPrices);
+          if (predictionPeriod>0 && prevId === id) {
+            const getPredictionPrices = [];
+            Object.keys(prediction).forEach((date) =>
             getPredictionPrices.push(prediction[date])
           );
-          setPrices(getPrices);
-          if (predictionPeriod) {
             setPredictionDates([dates[dates.length - 1], ...predDates]);
             setPredictionPrices([
               prices[prices.length - 1],
@@ -68,38 +69,25 @@ export const StockPrice = ({ id }) => {
         }
       });
   }, [id, predictionPeriod]);
-  const makePrediction = (value) => {
-    setPredictionPeriod(parseInt(value));
-  };
-  const onChange = (e) => { 
-    setPredictionPeriod(e.target.value)
+
+  const onChange = (value) => { 
+    setPredictionPeriod(value)
   }
   return (
-    <Card style={{ width: "800px" }}>
-      <Row> 
-        <Col offset={14}>
-        <Search
-          placeholder="Enter number of days for prediction"
-          allowClear
-          enterButton="Predict"
-          size="large"
-          onSearch={makePrediction}
-          style={{ width: "300px" }}
-          value={predictionPeriod}
-          onChange={onChange}
-        />
-        </Col>
-      </Row>
-      <Row>
-        {loading ? (
-          <Spin size="large" style={{marginTop:"auto", marginBottom:"auto"}} />
-        ) : (
-          <StockPriceGraph
-            history={{ x: dates, y: prices }}
-            prediction={{ x: predictionDates, y: predictionPrices }}
-          />
-        )}
-      </Row>
-    </Card>
+    <div>
+      <div style={{ padding: "12px", backgroundColor: "#001628" }}>
+        <Title level={4} style={{ margin: 0, color: "white" }}>ARIMA Forecast</Title>
+        <Text style={{ color: "white" }}>
+          {`forecasting for 
+          ${predictionPeriod || 0} ${ predictionPeriod && predictionPeriod === 1 ? "day" : "days"}`}
+          </Text>
+        <Slider defaultValue={0} max={50} value={predictionPeriod} onChange={onChange}/>
+      </div>
+      <StockPriceGraph
+        isLoading={loading}
+        history={{ x: dates, y: prices }}
+        prediction={{ x: predictionDates, y: predictionPrices }}
+      />
+    </div>
   );
 };

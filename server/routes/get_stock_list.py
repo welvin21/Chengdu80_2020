@@ -8,7 +8,7 @@ df = pd.read_csv('..//database/last_date_price.csv')
 def get_stock_list():
     stock_list = []
     for index, row in df.iterrows():
-        current = {'ticker': row['TICKER'], 'price': row['PRC'], 'company_name': row['COMNAM']}
+        current = {'ticker': row['TICKER'], 'close': row['PRC'], 'open': row['OPENPRC'], 'company_name': row['COMNAM']}
         stock_list.append(current)
 
     return jsonify(stock_list)
