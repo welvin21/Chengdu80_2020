@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Menu, Input, AutoComplete } from "antd";
-import { SearchOutlined } from '@ant-design/icons';
-import { Link, useRouteMatch, useLocation } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
+import { Link, useRouteMatch, useLocation, Redirect } from "react-router-dom";
 
 const { Content, Sider } = Layout;
 
@@ -33,9 +33,16 @@ stockItems.map((item) => options.push({ value: item.name }));
 
 export const StockNavBar = ({ children }) => {
   const match = useRouteMatch();
+  const location = useLocation();
+  const pathname = location.pathname;
+  const currentSelection = pathname.split("/")[2];
+
   const [collapsed, setCollapsed] = useState(false);
+  const onCollapse = (collapsed) => {
+    setCollapsed(collapsed);
+  };
+
   const [filteredStocks, setFilteredStocks] = useState(stockItems);
-  const [stockOptions, setStockOptions] = useState([]);
   const handleSearch = (value) => {
     let res = [];
     if (!value || value.indexOf("@") >= 0) {
@@ -44,16 +51,10 @@ export const StockNavBar = ({ children }) => {
       res = stockItems.filter(
         (item) => item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1
       );
-      console.log(res);
     }
     setFilteredStocks(res);
   };
-  const onCollapse = (collapsed) => {
-    setCollapsed(collapsed);
-  };
-  const location = useLocation();
-  const pathname = location.pathname;
-  const currentSelection = pathname.split("/")[2];
+
   return (
     <Layout style={{ height: "100%" }}>
       <Sider
@@ -78,7 +79,11 @@ export const StockNavBar = ({ children }) => {
             }
             open={false}
           >
-            <Input placeholder="Search Stock" bordered={false} suffix={<SearchOutlined/>}/>
+            <Input
+              placeholder="Search Stock"
+              bordered={false}
+              suffix={<SearchOutlined />}
+            />
           </AutoComplete>
           {filteredStocks.map((item) => (
             <Menu.Item key={item.route}>
@@ -87,7 +92,9 @@ export const StockNavBar = ({ children }) => {
           ))}
         </Menu>
       </Sider>
-      <Content style={{ margin: "0 16px" }}>
+      <Content
+        style={{ margin: "0 16px", marginTop: "auto", marginBottom: "auto" }}
+      >
         <div className="site-layout-content">{children}</div>
       </Content>
     </Layout>
