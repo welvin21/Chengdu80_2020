@@ -1,7 +1,4 @@
 import React from "react";
-import { Typography } from "antd";
-
-const { Text } = Typography;
 
 export const StockCard = ({ stockInfo, selected }) => {
   const { company_name: companyName, ticker, open, close } = stockInfo;

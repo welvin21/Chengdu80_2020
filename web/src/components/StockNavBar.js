@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Input, AutoComplete, Card } from "antd";
+import { Layout, Menu, Input, AutoComplete } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { Link, useRouteMatch, useLocation } from "react-router-dom";
 import { StockCard } from "./StockCard";
@@ -44,27 +44,28 @@ export const StockNavBar = ({ children }) => {
         width={300}
       >
         <div className="logo" />
-        <AutoComplete
-          style={{ width: 300, padding: "5px", margin: "auto" }}
-          onSearch={handleSearch}
-          filterOption={(inputValue, option) =>
-            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-            -1
-          }
-          open={false}
-        >
-          <Input
-            placeholder="Search Stock"
-            bordered={false}
-            suffix={<SearchOutlined />}
-          />
-        </AutoComplete>
         <Menu
           theme="dark"
           defaultSelectedKeys={[currentSelection]}
           mode="inline"
           style={{ height: "100%", overflow: "auto" }}
         >
+          <AutoComplete
+            style={{ width: 300, padding: "5px", margin: "auto", position: 'absolute', backgroundColor: '#001628' }}
+            onSearch={handleSearch}
+            filterOption={(inputValue, option) =>
+              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
+            }
+            open={false}
+          >
+            <Input
+              placeholder="Search Stock"
+              bordered={false}
+              suffix={<SearchOutlined />}
+            />
+          </AutoComplete>
+          <div style={{ height: 40}}></div>
           {filteredStocks.map((stock) => (
             <Link key={stock.ticker} to={`${match.url}/${stock.ticker}`} style={{ color: "white" }}>
               <StockCard stockInfo={stock} selected={currentSelection === stock.ticker} />
@@ -73,7 +74,7 @@ export const StockNavBar = ({ children }) => {
         </Menu>
       </Sider>
       <Content
-        style={{ margin: "0 16px", marginTop: "auto", marginBottom: "auto" }}
+        style={{ padding: "1%", height: "100%", textAlign: "left" }}
       >
         <div className="site-layout-content">{children}</div>
       </Content>
