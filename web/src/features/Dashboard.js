@@ -1,7 +1,9 @@
 import React from "react"; 
+import { IndustryGraph } from "../components/IndustryGraph";
+import { Card } from "antd"
 
 export const Dashboard = () => { 
   return( 
-    <div>Dashboard!</div>
+    <h1>Dashboard</h1>  
   )
 }
