@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Layout, Menu, Input, AutoComplete } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
 import { Link, useRouteMatch, useLocation } from "react-router-dom";
 
 const { Content, Sider } = Layout;
@@ -38,7 +39,7 @@ export const StockNavBar = ({ children }) => {
   const handleSearch = (value) => {
     let res = [];
     if (!value || value.indexOf("@") >= 0) {
-      res = stockItems
+      res = stockItems;
     } else {
       res = stockItems.filter(
         (item) => item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1
@@ -68,16 +69,17 @@ export const StockNavBar = ({ children }) => {
           mode="inline"
         >
           <AutoComplete
-            style={{ width: 200, padding: "5px", margin: "auto" }}
+            style={{ width: 300, padding: "5px", margin: "auto" }}
             options={options}
-            placeholder="Search Stock"
             onSearch={handleSearch}
             filterOption={(inputValue, option) =>
               option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
               -1
             }
             open={false}
-          ></AutoComplete>
+          >
+            <Input placeholder="Search Stock" bordered={false} suffix={<SearchOutlined/>}/>
+          </AutoComplete>
           {filteredStocks.map((item) => (
             <Menu.Item key={item.route}>
               <Link to={`${match.url}/${item.route}`}>{item.name}</Link>
