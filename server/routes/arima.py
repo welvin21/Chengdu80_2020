@@ -23,38 +23,16 @@ def get_arima_prediction():
     future_observations_count = request_data.get('future_observations_count', 10)
 
     try:
-        df = stocks[ticker]
+        df = pd.read_csv(f"../database/arima/{ticker.upper()}.csv")
     except:
         return jsonify({})
     
-    history = [x for x in df['PRC'].values]
-    model_predictions = []
-    
-    for time_point in range(future_observations_count):
-        model = ARIMA(history, order=(7,1,0))
-        model_fit = model.fit(disp=0)
-        output = model_fit.forecast()
-        y_hat = output[0]
-        model_predictions.append(y_hat.tolist()[0])
-        history.append(y_hat.tolist()[0])
+    history = df[df['is_prediction'] == True]
+    prediction = df[df['is_prediction'] == False]
 
-    date_data = df['date'].values.tolist()
-    history_data = {date_data[i]: history[i] for i in range(len(date_data))}
+    history_data = { data['date']: data['PRC'] for _, data in history.iterrows()}
 
-    date_split = [int(i) for i in date_data[-1].split("/")]
-    start_date = date(*date_split)
+    prediction_data = { data['date']: data['PRC'] for _, data in prediction.head(future_observations_count).iterrows() }
 
-    prediction_data = {}
-    
-    curr_date = start_date
-    for model_prediction in model_predictions:
-        if(curr_date.weekday() == 4):
-            curr_date = curr_date + timedelta(days=3)
-        else:
-            curr_date = curr_date + timedelta(days=1)
-
-        prediction_data[curr_date.strftime("%Y/%m/%d")] = model_prediction
-
-    return jsonify({'history': history_data, 'prediction': prediction_data})
-    
+    return jsonify({ 'history': history_data, 'prediction': prediction_data } )
     
