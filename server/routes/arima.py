@@ -1,5 +1,6 @@
 from app import app
 from flask import jsonify, request
+from flask_cors import cross_origin
 import numpy as np 
 import pandas as pd 
 import matplotlib.pyplot as plt
@@ -14,6 +15,7 @@ for ticker in transaction_data['TICKER'].unique():
     stocks[ticker] = transaction_data[transaction_data['TICKER'] == ticker]
 
 @app.route('/arima-forecast', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def get_arima_prediction():
     request_data = request.get_json()
 
