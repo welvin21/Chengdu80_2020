@@ -2,10 +2,13 @@ from app import app
 import pandas as pd
 from flask import request, jsonify
 
+transaction_data = pd.read_csv('../datasets/transaction_data_cleaned.csv')
+industry_data = pd.read_csv('../datasets/industry_relations.csv')
+industry_data = industry_data.fillna("")
+
 @app.route('/get-stock-data')
 def get_stock_data():
     requested_ticker = request.args.get('ticker')
-    transaction_data = pd.read_csv('../datasets/transaction_data_cleaned.csv')
 
     ticker_rows = transaction_data.loc[transaction_data['TICKER'] == requested_ticker]
     stock_data = {'ticker': requested_ticker, 'company_name': ticker_rows['COMNAM'].iloc[0], 'market_data': []}
@@ -19,8 +22,6 @@ def get_stock_data():
         current_date_data['outstanding'] = row['SHROUT']
         stock_data['market_data'].append(current_date_data)
 
-    industry_data = pd.read_csv('../datasets/industry_relations.csv')
-    industry_data = industry_data.fillna("")
     tickers_industry = industry_data[industry_data['TICKER'] == requested_ticker]['Industry'].values[0]
     stock_data['industry'] = tickers_industry
 
