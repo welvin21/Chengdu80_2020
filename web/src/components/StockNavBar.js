@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Menu, Input, AutoComplete } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { Link, useRouteMatch, useLocation, Redirect } from "react-router-dom";
+import { Link, useRouteMatch, useLocation } from "react-router-dom";
 
 const { Content, Sider } = Layout;
 
