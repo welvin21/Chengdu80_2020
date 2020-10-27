@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu, Input, AutoComplete } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { Link, useRouteMatch, useLocation } from "react-router-dom";
@@ -42,18 +42,25 @@ export const IndustryNavBar = ({ children }) => {
     setCollapsed(collapsed);
   };
 
-  const [filteredStocks, setFilteredStocks] = useState(stockItems);
-  const handleSearch = (value) => {
-    let res = [];
-    if (!value || value.indexOf("@") >= 0) {
-      res = stockItems;
-    } else {
-      res = stockItems.filter(
-        (item) => item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1
-      );
-    }
-    setFilteredStocks(res);
-  };
+  const [industries, setIndustries] = useState([])
+//   const [filteredStocks, setFilteredStocks] = useState(stockItems);
+//   const handleSearch = (value) => {
+//     let res = [];
+//     if (!value || value.indexOf("@") >= 0) {
+//       res = stockItems;
+//     } else {
+//       res = stockItems.filter(
+//         (item) => item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1
+//       );
+//     }
+//     setFilteredStocks(res);
+//   };
+
+  useEffect(() => { 
+    fetch("http://localhost:5000/get-industry-list")
+    .then(response => response.json())
+    .then(data => setIndustries(data.industry_list))
+  }, [])
 
   return (
     <Layout style={{ height: "100%" }}>
@@ -69,7 +76,7 @@ export const IndustryNavBar = ({ children }) => {
           defaultSelectedKeys={[currentSelection]}
           mode="inline"
         >
-          <AutoComplete
+          {/* <AutoComplete
             style={{ width: 300, padding: "5px", margin: "auto" }}
             options={options}
             onSearch={handleSearch}
@@ -84,10 +91,10 @@ export const IndustryNavBar = ({ children }) => {
               bordered={false}
               suffix={<SearchOutlined />}
             />
-          </AutoComplete>
-          {filteredStocks.map((item) => (
-            <Menu.Item key={item.route}>
-              <Link to={`${match.url}/${item.route}`}>{item.name}</Link>
+          </AutoComplete> */}
+          {industries.map((item) => (
+            <Menu.Item key={item}>
+              <Link to={`${match.url}/${item}`}>{item}</Link>
             </Menu.Item>
           ))}
         </Menu>

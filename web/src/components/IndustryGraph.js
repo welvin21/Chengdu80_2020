@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Graph } from "react-d3-graph";
 
 export const IndustryGraph = ({ industry }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({"nodes": [], "links":[]});
   const [valueThreshold, setValueThreshold] = useState(0.7);
   const [loading, setLoading] = useState(true);
   const myConfig = {
@@ -97,15 +97,22 @@ export const IndustryGraph = ({ industry }) => {
   };
 
   useEffect(() => {
+      setLoading(true); 
+      setData({"nodes": [], "links":[]});
     fetch(`http://localhost:5000/get-industry-graph?industry=${industry}`)
       .then((response) => response.json())
       .then((data) => {
         const filteredLinks = data.links.filter(item => Math.abs(item.label) > valueThreshold)
-        console.log(filteredLinks)
+        const filteredNodes = new Set();
+        filteredLinks.forEach(({source,target}) => {
+            filteredNodes.add(source); 
+            filteredNodes.add(target)
+        }); 
+        const filteredNodesArray = Array.from(filteredNodes).map(node=> ({"id":node}) )
         setData({ 
-            nodes: data.nodes,
+            nodes: filteredNodesArray,
             links: filteredLinks, 
-        });
+        }); 
         setLoading(false);
       });
   },[industry, valueThreshold]);
