@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
+import { DashboardOutlined, StockOutlined } from "@ant-design/icons"
 import { Link, useLocation } from "react-router-dom";
 
 const { Header, Content } = Layout;
@@ -8,12 +9,12 @@ const menuItems = [
   {
     name: "Dashboard",
     route: "/",
-    icon: "",
+    icon: <DashboardOutlined />,
   },
   {
     name: "Stocks",
     route: "/stocks",
-    icon: "",
+    icon: <StockOutlined />,
   },
 ];
 
@@ -31,7 +32,7 @@ export const NavBar = ({ children }) => {
           defaultSelectedKeys={[currentSelection]}
         >
           {menuItems.map((item) => (
-            <Menu.Item key={item.route}>
+            <Menu.Item key={item.route} icon={item.icon}>
               <Link to={item.route}>{item.name} </Link>
             </Menu.Item>
           ))}
