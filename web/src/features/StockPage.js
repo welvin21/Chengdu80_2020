@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StockPrice } from "../components/StockPrice";
 import { useParams } from "react-router-dom"
-import { Typography, Spin, Row, Col } from "antd";
+import { Typography, Spin, Row, Col, Tag } from "antd";
 
 const { Text, Title } = Typography;
 
@@ -26,9 +26,12 @@ export const StockPage = () => {
 
   return ( 
     <div style={{ maxHeight: '100%', overflowY: 'scroll'}}>
-        <div style={{ marginBottom: "18px" }}>
-          <Title style={{ fontSize: "48px", fontWeight: 600, marginBottom: "0px" }}>{stockData.ticker}</Title>
-          <Text style={{ color: "grey" }}>{stockData.company_name}</Text>
+        <div style={{ marginBottom: "20px" }}>
+          <div style={{ display: "flex", alignItems: "baseline" }}>
+            <Title style={{ fontSize: "48px", fontWeight: 600, marginBottom: "0px" }}>{stockData.ticker}</Title>
+            <Text style={{ color: "#737373", marginLeft: "8px" }}>{stockData.company_name}</Text>
+          </div>
+          <Tag color="#001628" style={{ cursor: "pointer", marginTop: "4px" }}>{stockData.industry || "unknown"}</Tag>
         </div>
         <Row>
           <Col span={14}>

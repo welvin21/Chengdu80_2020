@@ -4,7 +4,7 @@ import { Spin } from "antd";
 
 export const StockPriceGraph = ({ isLoading, history, prediction }) => {
   if(isLoading) {
-    return <Spin/>
+    return <Spin style={{ marginTop: "8px" }} />
   }
 
   return (
