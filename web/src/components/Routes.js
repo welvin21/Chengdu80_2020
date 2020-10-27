@@ -1,18 +1,16 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Dashboard from "./Dashboard";
-import NavBar from "./NavBar";
-import StockRoute from "./StockRoute";
+import { Switch, Route } from "react-router-dom";
+import { Dashboard } from "../features";
+import { NavBar } from ".";
+import { StockRoutes } from ".";
 
-export default function Routes() {
+export const Routes = () => {
   return (
-    <Router>
-      <NavBar>
-        <Switch>
-          <Route exact path="/" component={Dashboard} />
-          <Route exact path="/stocks" component={StockRoute} />
-        </Switch>
-      </NavBar>
-    </Router>
+  <NavBar>
+    <Switch>
+      <Route path="/stocks" component={StockRoutes} />
+      <Route exact path="/" component={Dashboard} />
+    </Switch>
+  </NavBar>
   );
 }

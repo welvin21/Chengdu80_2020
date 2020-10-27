@@ -1,33 +1,39 @@
 import React, { useState } from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
-import {
-  DesktopOutlined,
-  PieChartOutlined,
-  FileOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Layout, Menu } from "antd";
+import { Link, useRouteMatch, useLocation } from "react-router-dom";
 
 const { Content, Sider } = Layout;
-const { SubMenu } = Menu;
 
 const stockItems = [
   {
     ticker: "AAPL",
     name: "Apple",
-    route: "/stock/aapl",
+    route: "aapl",
+  },
+  {
+    ticker: "GOOG",
+    name: "Google",
+    route: "goog",
+  },
+  {
+    ticker: "NIKE",
+    name: "Nike",
+    route: "nike",
   },
 ];
 
-const StockNavBar = ({ children }) => {
-    console.log(children)
+export const StockNavBar = ({ children }) => {
+  const match = useRouteMatch();
   const [collapsed, setCollapsed] = useState(false);
   const onCollapse = (collapsed) => {
     setCollapsed(collapsed);
   };
+
+  const location = useLocation();
+  const pathname = location.pathname;
+  const currentSelection = pathname.split("/")[2];
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ height: "100%" }}>
       <Sider
         collapsible
         collapsed={collapsed}
@@ -35,21 +41,17 @@ const StockNavBar = ({ children }) => {
         width={300}
       >
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
+        <Menu theme="dark" defaultSelectedKeys={[currentSelection]} mode="inline">
           {stockItems.map((item) => (
             <Menu.Item key={item.route}>
-              <Link to={item.route}>{item.name}</Link>
+              <Link to={`${match.url}/${item.route}`}>{item.name}</Link>
             </Menu.Item>
           ))}
         </Menu>
       </Sider>
-      <Layout className="site-layout">
-        <Content style={{ margin: "0 16px" }}>
-          <div className="site-layout-content">{children}</div>
-        </Content>
-      </Layout>
+      <Content style={{ margin: "0 16px" }}>
+        <div className="site-layout-content">{children}</div>
+      </Content>
     </Layout>
   );
 };
-
-export default StockNavBar;

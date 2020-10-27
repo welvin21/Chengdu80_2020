@@ -1,8 +1,8 @@
 import React from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 const menuItems = [
   {
@@ -17,18 +17,18 @@ const menuItems = [
   },
 ];
 
-export default function NavBar({ children }) {
+export const NavBar = ({ children }) => {
   const location = useLocation();
-  const baseLength = process.env.PUBLIC_URL.length;
-  const currentRoute = location.pathname.slice(baseLength);
+  const pathname = location.pathname;
+  const currentSelection = `/${pathname.split("/")[1]}`;
   return (
-    <Layout className="layout" style={{ minHeight: "100vh" }}>
+    <Layout className="layout" style={{ height: "100vh" }}>
       <Header>
         <div className="logo" />
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={[currentRoute]}
+          defaultSelectedKeys={[currentSelection]}
         >
           {menuItems.map((item) => (
             <Menu.Item key={item.route}>
@@ -38,11 +38,8 @@ export default function NavBar({ children }) {
         </Menu>
       </Header>
       <Content>
-        <div className="site-layout-content">{children}</div>
+        {children}
       </Content>
-      <Footer style={{ textAlign: "center" }}>
-        Ant Design ©2018 Created by Ant UED
-      </Footer>
     </Layout>
   );
 }
