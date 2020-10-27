@@ -8,6 +8,7 @@ import routes.arima
 import routes.get_stock_list
 import routes.get_stock_data
 import routes.industry_graph
+import routes.get_industry_list
 
 @app.route('/')
 @cross_origin(supports_credentials=True)
