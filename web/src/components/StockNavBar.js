@@ -1,35 +1,10 @@
-import React, { useState } from "react";
-import { Layout, Menu, Input, AutoComplete } from "antd";
+import React, { useState, useEffect } from "react";
+import { Layout, Menu, Input, AutoComplete, Card } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { Link, useRouteMatch, useLocation } from "react-router-dom";
+import { StockCard } from "./StockCard";
 
 const { Content, Sider } = Layout;
-
-const stockItems = [
-  {
-    ticker: "AAPL",
-    name: "Apple",
-    route: "aapl",
-  },
-  {
-    ticker: "AAPL",
-    name: "Apples",
-    route: "aap",
-  },
-  {
-    ticker: "GOOG",
-    name: "Google",
-    route: "goog",
-  },
-  {
-    ticker: "NIKE",
-    name: "Nike",
-    route: "nike",
-  },
-];
-
-const options = [];
-stockItems.map((item) => options.push({ value: item.name }));
 
 export const StockNavBar = ({ children }) => {
   const match = useRouteMatch();
@@ -37,19 +12,27 @@ export const StockNavBar = ({ children }) => {
   const pathname = location.pathname;
   const currentSelection = pathname.split("/")[2];
 
-  const [collapsed, setCollapsed] = useState(false);
-  const onCollapse = (collapsed) => {
-    setCollapsed(collapsed);
-  };
+  const [stockList, setStockList] = useState([]);
+  const [filteredStocks, setFilteredStocks] = useState([]);
 
-  const [filteredStocks, setFilteredStocks] = useState(stockItems);
+  useEffect(() => {
+    const fetchStockList = async () => {
+      const response = await fetch("http://localhost:5000/get-stock-list");
+      const stockListData = await response.json();
+      setStockList(stockListData);
+      setFilteredStocks(stockListData);
+    }
+
+    fetchStockList();
+  }, [])
+
   const handleSearch = (value) => {
     let res = [];
     if (!value || value.indexOf("@") >= 0) {
-      res = stockItems;
+      res = stockList;
     } else {
-      res = stockItems.filter(
-        (item) => item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1
+      res = stockList.filter(
+        (stock) => stock.ticker.toUpperCase().indexOf(value.toUpperCase()) !== -1
       );
     }
     setFilteredStocks(res);
@@ -58,37 +41,34 @@ export const StockNavBar = ({ children }) => {
   return (
     <Layout style={{ height: "100%" }}>
       <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={onCollapse}
         width={300}
       >
         <div className="logo" />
+        <AutoComplete
+          style={{ width: 300, padding: "5px", margin: "auto" }}
+          onSearch={handleSearch}
+          filterOption={(inputValue, option) =>
+            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+            -1
+          }
+          open={false}
+        >
+          <Input
+            placeholder="Search Stock"
+            bordered={false}
+            suffix={<SearchOutlined />}
+          />
+        </AutoComplete>
         <Menu
           theme="dark"
           defaultSelectedKeys={[currentSelection]}
           mode="inline"
+          style={{ height: "100%", overflow: "auto" }}
         >
-          <AutoComplete
-            style={{ width: 300, padding: "5px", margin: "auto" }}
-            options={options}
-            onSearch={handleSearch}
-            filterOption={(inputValue, option) =>
-              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
-            open={false}
-          >
-            <Input
-              placeholder="Search Stock"
-              bordered={false}
-              suffix={<SearchOutlined />}
-            />
-          </AutoComplete>
-          {filteredStocks.map((item) => (
-            <Menu.Item key={item.route}>
-              <Link to={`${match.url}/${item.route}`}>{item.name}</Link>
-            </Menu.Item>
+          {filteredStocks.map((stock) => (
+            <Link key={stock.ticker} to={`${match.url}/${stock.ticker}`} style={{ color: "white" }}>
+              <StockCard stockInfo={stock} selected={currentSelection === stock.ticker} />
+            </Link>
           ))}
         </Menu>
       </Sider>
