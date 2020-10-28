@@ -20,7 +20,7 @@ export const IndustryTabs = () => {
       changeMetric: () => setMetric("kendall-tau"),
     },
     {
-      title: "Spearman Rank Corelation",
+      title: "Spearman Rank Correlation",
       value: "spearman",
       changeMetric: () => setMetric("spearman"),
     },
