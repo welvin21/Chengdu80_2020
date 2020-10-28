@@ -14,6 +14,7 @@ import shap
 import time
 import ta
 from ta.volatility import BollingerBands
+from ta.trend import ADXIndicator
 from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
