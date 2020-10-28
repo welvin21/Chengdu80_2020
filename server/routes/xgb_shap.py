@@ -75,14 +75,11 @@ def get_stock_predictions():
     except:
         return jsonify({})
 
-
-    
     xgb = XGBClassifier(random_state=0, seed = 312)
+
     xgb.fit(X.iloc[:-1], y.iloc[:-1])
 
     predict_for = pd.DataFrame(X.iloc[date]).T
-
-    # print(xgb.predict(X))
 
     answer = xgb.predict_proba(predict_for)[0]
     prediction = xgb.predict(predict_for)[0]
