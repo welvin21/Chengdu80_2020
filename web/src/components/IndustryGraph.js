@@ -55,8 +55,8 @@ export const IndustryGraph = ({
     setSelectedNode(nodeId);
   };
 
-  const onClickLink = function (source, target, label) {
-    setSelectedLink({ source, target, label });
+  const onClickLink = function (source, target, labelProperty) {
+    setSelectedLink({ source, target, labelProperty });
   };
   return !loading && data.nodes.length > 0 ? (
     <Graph

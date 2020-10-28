@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col, InputNumber, Tooltip, TreeSelect } from "antd";
+import {
+  Button,
+  Row,
+  Col,
+  InputNumber,
+  Tooltip,
+  TreeSelect,
+  Card,
+  Typography,
+} from "antd";
 import { IndustryGraph } from "../components/IndustryGraph";
 import { usePrevious } from "../utility/hooks";
+import { IndustryStockGraph } from "../components/IndustryStockGraph";
 
 const { SHOW_PARENT } = TreeSelect;
+const { Title } = Typography;
 
-export const IndustryGraphPage = ({ industry, metric }) => {
+export const IndustryGraphPage = ({ industry }) => {
   const prevIndustry = usePrevious(industry);
+  const [metric, setMetric] = useState("pearson");
   const prevMetric = usePrevious(metric);
   const [data, setData] = useState({ nodes: [], links: [] });
   const [industryData, setIndustryData] = useState([]);
@@ -20,6 +32,25 @@ export const IndustryGraphPage = ({ industry, metric }) => {
     target: "",
     label: "",
   });
+  const metricButtons = [
+    {
+      title: "Pearson Correlation",
+      value: "pearson",
+      changeMetric: () => {
+        setMetric("pearson");
+      },
+    },
+    {
+      title: "Kendall-Tau Correlation",
+      value: "kendall-tau",
+      changeMetric: () => setMetric("kendall-tau"),
+    },
+    {
+      title: "Spearman Correlation",
+      value: "spearman",
+      changeMetric: () => setMetric("spearman"),
+    },
+  ];
   const onChange = (value) => {
     if (isNaN(value)) {
       return;
@@ -114,34 +145,79 @@ export const IndustryGraphPage = ({ industry, metric }) => {
       });
       setLoading(false);
     }
-  }, [industry, valueThreshold, selectedStocks, metric]);
+    if (selectedNode) {
+      const nodesList = industryData.links
+        .filter(
+          (link) => link.source === selectedNode || link.target === selectedNode
+        )
+        .map((link) => {
+          if (link.source === selectedNode)
+            return { ticker: link.target, value: link.label };
+          else if (link.target === selectedNode)
+            return { ticker: link.source, value: link.label };
+        }).sort((a,b) => b.value - a.value);
+        console.log(nodesList)
+      
+    }
+  }, [industry, valueThreshold, selectedStocks, metric, selectedNode]);
   return (
-    <Card style={{ minHeight: "85vh" }}>
-      <Row>
-        <Col span={14}>
-            <TreeSelect {...tProps} />
-        </Col>
-        <Col span={4}>
-          <Tooltip
-            trigger={["focus"]}
-            title="Input minimum threshold correlation value"
-            placement="topLeft"
-            overlayClassName="numeric-input"
-          >
-            <InputNumber
-              min={0}
-              max={1}
-              style={{ margin: "0 16px" }}
-              step={0.01}
-              value={valueThreshold}
-              onChange={onChange}
+    <Row>
+      <Col span={12}>
+        <Card style={{ minHeight: "85vh", width: "100%" }}>
+          <Row>
+            {metricButtons.map((button) => (
+              <Button
+                style={{ marginRight: "0em" }}
+                onClick={button.changeMetric}
+                type={button.value == metric ? "primary" : ""}
+              >
+                {button.title}
+              </Button>
+            ))}
+          </Row>
+          <Row>
+            <Col span={14}>
+              <TreeSelect {...tProps} />
+            </Col>
+            <Col span={4}>
+              <Tooltip
+                trigger={["focus"]}
+                title="Input minimum threshold correlation value"
+                placement="topLeft"
+                overlayClassName="numeric-input"
+              >
+                <InputNumber
+                  min={0}
+                  max={1}
+                  style={{ margin: "0 16px" }}
+                  step={0.01}
+                  value={valueThreshold}
+                  onChange={onChange}
+                />
+              </Tooltip>
+            </Col>
+          </Row>
+          <Row>
+            <IndustryGraph
+              loading={loading}
+              data={data}
+              setSelectedNode={setSelectedNode}
+              setSelectedLink={setSelectedLink}
             />
-          </Tooltip>
-        </Col>
-      </Row>
-      <Row >
-        <IndustryGraph loading={loading} data={data} />
-      </Row>
-    </Card>
+          </Row>
+        </Card>
+      </Col>
+      <Col span={12}>
+        <Row style={{ backgroundColor: "#fff", marginLeft: "1em" }}>
+          <Row>
+            <IndustryStockGraph ticker={selectedLink.source} color="red" />
+          </Row>
+          <Row>
+            <IndustryStockGraph ticker={selectedLink.target} color="blue" />
+          </Row>
+        </Row>
+        <Row></Row>
+      </Col>
+    </Row>
   );
 };

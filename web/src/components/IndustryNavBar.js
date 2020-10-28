@@ -21,7 +21,7 @@ export const IndustryNavBar = ({ children }) => {
   return (
     <Layout style={{ height: "100%" }}>
       <Sider
-        width={300}
+        width={200}
       >
         <div className="logo" />
         <Menu
