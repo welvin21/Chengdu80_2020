@@ -153,6 +153,7 @@ export const IndustryGraphPage = ({ industry }) => {
       <Col span={12}>
         <Card style={{ minHeight: "85vh", width: "100%" }}>
           <Row>
+            <Col span={24}>
             {metricButtons.map((button) => (
               <Button
                 style={{ marginRight: "0em" }}
@@ -162,6 +163,7 @@ export const IndustryGraphPage = ({ industry }) => {
                 {button.title}
               </Button>
             ))}
+            </Col>
           </Row>
           <Row>
             <Col span={14}>
@@ -186,28 +188,31 @@ export const IndustryGraphPage = ({ industry }) => {
             </Col>
           </Row>
           <Row>
-            <IndustryGraph
-              loading={loading}
-              data={data}
-              setSelectedNode={setSelectedNode}
-              setSelectedLink={setSelectedLink}
-            />
+            <Col span={24}>
+              <IndustryGraph
+                loading={loading}
+                data={data}
+                setSelectedNode={setSelectedNode}
+                setSelectedLink={setSelectedLink}
+              />
+            </Col>
           </Row>
         </Card>
       </Col>
       <Col span={12}>
-        <Row style={{ backgroundColor: "#fff", marginLeft: "1em" }}>
-          <Row>
+        <Row style={{ marginLeft: "1em" }}>
+          <div style={{ width: "100%", padding: "12px", backgroundColor: "#001628" }}>
+            <Title level={4} style={{ color: "white", margin: 0 }}>Correlation Analysis</Title>
+          </div>
+          <div style={{ width: "100%", backgroundColor: "white", paddingTop: "8px" }}>
             <IndustryStockGraph ticker={selectedLink.source} color="#4E2286" />
-          </Row>
-          <Row>
             <IndustryStockGraph ticker={selectedLink.target} color="#001628" />
-          </Row>
-          <Row>
+            <Title level={4} style={{ textAlign: "center" }}>Top 5 related firms {
+              selectedNode ? ` for ${selectedNode}` : ""
+            }</Title>
             <StockNodeAdjacentInfo ticker={selectedNode} industryData={industryData}/>
-          </Row>
+          </div>
         </Row>
-        <Row></Row>
       </Col>
     </Row>
   );
