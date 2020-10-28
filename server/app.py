@@ -5,6 +5,7 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 
 import routes.arima
+import routes.xgb_shap
 
 @app.route('/')
 @cross_origin(supports_credentials=True)
