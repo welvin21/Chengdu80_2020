@@ -1,13 +1,16 @@
 import React from "react";
-import { Tabs, Typography } from "antd";
+import { Tabs, Typography, Image } from "antd";
 
 import { FeatureImportanceChart } from "../components";
+import { useRouteMatch, useLocation } from "react-router-dom";
 
 const { Title } = Typography;
 
 const { TabPane } = Tabs;
 
 export const Interpretations = ({ featureImportances }) => {
+  const location = useLocation();
+
   return (
     <>
     <div style={{ padding: "12px", backgroundColor: "#001628" }}>
@@ -15,7 +18,7 @@ export const Interpretations = ({ featureImportances }) => {
     </div>
     <Tabs defaultActiveKey="1" size="large" style={{ paddingLeft: "4px" }}>
       <TabPane tab="XGBoost" key="1"> 
-        <Title level={4}>Feature Importance</Title>
+        <Title level={4} style={{ marginLeft: "8px" }}>Feature Importance</Title>
         <FeatureImportanceChart featureImportances={featureImportances} />
       </TabPane>
       <TabPane tab="ARIMA" key="2"> 
