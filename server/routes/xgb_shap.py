@@ -16,9 +16,6 @@ import ta
 from ta.volatility import BollingerBands
 from ta.trend import ADXIndicator
 from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-from io import StringIO
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
 
