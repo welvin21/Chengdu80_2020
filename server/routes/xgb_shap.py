@@ -16,6 +16,9 @@ import ta
 from ta.volatility import BollingerBands
 from ta.trend import ADXIndicator
 from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+from io import StringIO
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
 
@@ -32,6 +35,8 @@ def get_stock_predictions():
     start = time.time()
     ticker = request.args.get('ticker')
     date = -1
+
+    np.random.seed(312)
 
     try:
         # industry_df = pd.read_csv(f'/content/industry_info/{industry}_returns.csv')
@@ -75,13 +80,12 @@ def get_stock_predictions():
 
 
     
-    xgb = XGBClassifier()
+    xgb = XGBClassifier(random_state=0, seed = 312)
     xgb.fit(X.iloc[:-1], y.iloc[:-1])
 
     predict_for = pd.DataFrame(X.iloc[date]).T
 
     # print(xgb.predict(X))
-
 
     answer = xgb.predict_proba(predict_for)[0]
     prediction = xgb.predict(predict_for)[0]
