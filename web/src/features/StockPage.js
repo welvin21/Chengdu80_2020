@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StockPrice } from "../components/StockPrice";
 import { useParams, Link } from "react-router-dom"
 import { Typography, Spin, Row, Col, Tag } from "antd";
+import { XGBoostPrediction } from "../components";
 
 const { Text, Title } = Typography;
 
@@ -42,7 +43,8 @@ export const StockPage = () => {
           }
         </div>
         <Row>
-          <Col span={14}>
+          <Col span={12}>
+            <XGBoostPrediction />
             <StockPrice id={id}/>
           </Col>
         </Row>

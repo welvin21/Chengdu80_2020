@@ -29,7 +29,7 @@ export const StockPriceGraph = ({ isLoading, history, prediction }) => {
         },
       ]}
       layout={{
-        autosize: true,
+        height: 300,
         xaxis: {
           type: "date",
         },
