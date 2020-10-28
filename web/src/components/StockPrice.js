@@ -1,26 +1,18 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState} from "react";
 import { Typography, Slider } from "antd";
 import { StockPriceGraph } from "./StockPriceGraph";
+import { usePrevious } from "../utility/hooks";
 
 const { Title, Text } = Typography;
 
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
-
 export const StockPrice = ({ id }) => {
-  const prevId = usePrevious(id);
+  const prevId = usePrevious(id)
   const [loading, setLoading] = useState(true);
   const [dates, setDates] = useState([]);
   const [prices, setPrices] = useState([]);
   const [predictionDates, setPredictionDates] = useState([]);
   const [predictionPrices, setPredictionPrices] = useState([]);
   const [predictionPeriod, setPredictionPeriod] = useState(0);
-  console.log({ predictionPeriod})
   useEffect(() => {
     if(prevId !== id){ 
       setPredictionPeriod(0);
@@ -68,7 +60,7 @@ export const StockPrice = ({ id }) => {
           setLoading(false);
         }
       });
-  }, [id, predictionPeriod]);
+  }, [id, predictionPeriod, prevId]);
 
   const onChange = (value) => { 
     setPredictionPeriod(value)

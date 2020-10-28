@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Spin } from "antd";
 import { Graph } from "react-d3-graph";
 
-export const IndustryGraph = ({ industry }) => {
-  const [data, setData] = useState({"nodes": [], "links":[]});
-  const [valueThreshold, setValueThreshold] = useState(0.7);
-  const [loading, setLoading] = useState(true);
+export const IndustryGraph = ({ data, loading }) => {
   const myConfig = {
     automaticRearrangeAfterDropNode: false,
     collapsible: false,
@@ -13,7 +11,6 @@ export const IndustryGraph = ({ industry }) => {
     focusZoom: 5,
     highlightDegree: 1,
     highlightOpacity: 1,
-    linkHighlightBehavior: false,
     maxZoom: 8,
     minZoom: 0.1,
     nodeHighlightBehavior: true,
@@ -22,9 +19,9 @@ export const IndustryGraph = ({ industry }) => {
     staticGraphWithDragAndDrop: false,
     linkHighlightBehavior: true,
     d3: {
-      alphaTarget: 0.4,
+      alphaTarget: 0.3,
       gravity: 55,
-      linkLength: 400,
+      linkLength: 500,
       linkStrength: 1,
       disableLinkForce: false,
     },
@@ -96,28 +93,9 @@ export const IndustryGraph = ({ industry }) => {
     );
   };
 
-  useEffect(() => {
-      setLoading(true); 
-      setData({"nodes": [], "links":[]});
-    fetch(`http://localhost:5000/get-industry-graph?industry=${industry}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const filteredLinks = data.links.filter(item => Math.abs(item.label) > valueThreshold)
-        const filteredNodes = new Set();
-        filteredLinks.forEach(({source,target}) => {
-            filteredNodes.add(source); 
-            filteredNodes.add(target)
-        }); 
-        const filteredNodesArray = Array.from(filteredNodes).map(node=> ({"id":node}) )
-        setData({ 
-            nodes: filteredNodesArray,
-            links: filteredLinks, 
-        }); 
-        setLoading(false);
-      });
-  },[industry, valueThreshold]);
+  
   return loading ? (
-    <div>loading</div>
+    <Spin style={{ marginTop: "auto", marginBotton: "auto" }} />
   ) : (
     <Graph
       id="graph-id"
@@ -126,7 +104,7 @@ export const IndustryGraph = ({ industry }) => {
       onClickNode={onClickNode}
       onDoubleClickNode={onDoubleClickNode}
       onRightClickNode={onRightClickNode}
-      onClickGraph={onClickGraph}
+    //   onClickGraph={onClickGraph}
       onClickLink={onClickLink}
       onRightClickLink={onRightClickLink}
       //   onMouseOverNode={onMouseOverNode}
