@@ -45,25 +45,25 @@ def get_stock_predictions():
 
         ewma = pd.Series.ewm
 
-        df['ewma_12'] = df['PRC'].transform(lambda x: ewma(x, span = 12).mean())
-        df['ewma_26'] = df['PRC'].transform(lambda x: ewma(x, span = 26).mean())
-        df['momentum_factor'] = df['ewma_12']/df['ewma_26']
+        df['Fast_Exp_Moving_Avg'] = df['PRC'].transform(lambda x: ewma(x, span = 12).mean())
+        df['Slow_Exp_Moving_Avg'] = df['PRC'].transform(lambda x: ewma(x, span = 26).mean())
+        df['Momentum_Factor'] = df['Fast_Exp_Moving_Avg']/df['Slow_Exp_Moving_Avg']
 
-        df['mav'] = df['PRC'].transform(lambda x: x.rolling(window=20).mean())
-        df['mav_std'] = df['PRC'].transform(lambda x: x.rolling(window=20).std())  
+        df['Moving_Avg'] = df['PRC'].transform(lambda x: x.rolling(window=20).mean())
+        df['Moving_Std_Deviation'] = df['PRC'].transform(lambda x: x.rolling(window=20).std())  
         
-        df['UltimateOscillator'] = UltimateOscillator(df['ASKHI'], df['BIDLO'], df['PRC'], fillna = True).uo()
-        df['RSIIndicator'] = RSIIndicator(df['PRC'], 14, False).rsi()
-        df['colummn'] = StochasticOscillator(df['ASKHI'], df['BIDLO'], df['PRC'], 14, 3, True).stoch()
+        df['Ultimate_Oscillator'] = UltimateOscillator(df['ASKHI'], df['BIDLO'], df['PRC'], fillna = True).uo()
+        df['RSI_Indicator'] = RSIIndicator(df['PRC'], 14, False).rsi()
+        df['Stochastic_Oscillator'] = StochasticOscillator(df['ASKHI'], df['BIDLO'], df['PRC'], 14, 3, True).stoch()
 
         # print("3")
         n_fast = 12
         n_slow = 26
-        df['MACD'] = df['ewma_26'] - df['ewma_12']
+        df['MACD'] = df['Slow_Exp_Moving_Avg'] - df['Fast_Exp_Moving_Avg']
 
         # Bollinger Bands
-        df['BollingerB_UP'] =  df['mav'] + df['mav_std']*2
-        df['BollingerB_DOWN'] = df['mav'] - df['mav_std']*2
+        df['BollingerB_UP'] =  df['Moving_Avg'] + df['Moving_Std_Deviation']*2
+        df['BollingerB_DOWN'] = df['Moving_Avg'] - df['Moving_Std_Deviation']*2
 
         df.dropna(inplace = True)
         X = df[df.columns[~df.columns.isin(['1_day_return','TICKER'])]]
