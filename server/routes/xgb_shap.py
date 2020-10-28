@@ -30,9 +30,6 @@ stocks_industry = {}
 
 with open('../database/industry_info/stock_industry.json', 'r') as fp:
     stocks_industry = json.load(fp)
-    # print(stocks_industry)
-    
-# df = pd.read_csv(f"../database/arima/{ticker.upper()}.csv")
 
 @app.route('/stock-predictions', methods=['GET'])
 @cross_origin(supports_credentials=True)

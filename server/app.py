@@ -10,6 +10,7 @@ import routes.get_stock_data
 import routes.industry_graph
 import routes.get_industry_list
 import routes.xgb_shap
+import routes.get_returns_data
 
 
 @app.route('/')
