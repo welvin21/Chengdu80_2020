@@ -16,6 +16,7 @@ import ta
 from ta.volatility import BollingerBands
 from ta.trend import ADXIndicator
 from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
+import json
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
 
@@ -24,7 +25,14 @@ stocks = {}
 for ticker in transaction_data['TICKER'].unique():
     stock = transaction_data[transaction_data['TICKER'] == ticker]
     stocks[ticker] = stock
+
+stocks_industry = {}
+
+with open('../database/industry_info/stock_industry.json', 'r') as fp:
+    stocks_industry = json.load(fp)
+    # print(stocks_industry)
     
+# df = pd.read_csv(f"../database/arima/{ticker.upper()}.csv")
 
 @app.route('/stock-predictions', methods=['GET'])
 @cross_origin(supports_credentials=True)
@@ -36,8 +44,7 @@ def get_stock_predictions():
     np.random.seed(312)
 
     try:
-        # industry_df = pd.read_csv(f'/content/industry_info/{industry}_returns.csv')
-        # industry_df.set_index('date', inplace=True, drop=True)
+        
 
         df = stocks[ticker].copy()
         df['return'] = df['PRC'].pct_change()
@@ -68,6 +75,13 @@ def get_stock_predictions():
         df['BollingerB_UP'] =  df['Moving_Avg'] + df['Moving_Std_Deviation']*2
         df['BollingerB_DOWN'] = df['Moving_Avg'] - df['Moving_Std_Deviation']*2
 
+        if stocks_industry.get(ticker) != None:
+            industry = stocks_industry.get(ticker)
+
+            industry_df = pd.read_csv(f'../database/industry_info/{industry}_returns.csv')
+            industry_df.set_index('date', inplace=True, drop=True)
+            df['avg_industry_return'] = industry_df['avg_return']
+
         df.dropna(inplace = True)
         X = df[df.columns[~df.columns.isin(['1_day_return','TICKER'])]]
         y = df.loc[:, '1_day_return']
@@ -77,13 +91,13 @@ def get_stock_predictions():
 
 
     
-    xgb = XGBClassifier(random_state=0, seed = 312)
+    xgb = XGBClassifier()
     xgb.fit(X.iloc[:-1], y.iloc[:-1])
 
     predict_for = pd.DataFrame(X.iloc[date]).T
+    print(predict_for)
 
     # print(xgb.predict(X))
-
     answer = xgb.predict_proba(predict_for)[0]
     prediction = xgb.predict(predict_for)[0]
     confidence = max(answer) * 100
