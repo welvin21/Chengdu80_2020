@@ -8,19 +8,19 @@ export const IndustryTabs = () => {
   const [metric, setMetric] = useState("pearson");
   const metricButtons = [
     {
-      title: "Pearson Correlation Coefficient",
+      title: "Pearson Correlation",
       value: "pearson",
       changeMetric: () => {
         setMetric("pearson");
       },
     },
     {
-      title: "Kendall-Tau Correlation Coefficient",
+      title: "Kendall-Tau Correlation",
       value: "kendall-tau",
       changeMetric: () => setMetric("kendall-tau"),
     },
     {
-      title: "Spearman Rank Correlation",
+      title: "Spearman Correlation",
       value: "spearman",
       changeMetric: () => setMetric("spearman"),
     },
@@ -30,11 +30,11 @@ export const IndustryTabs = () => {
     setMetric("pearson");
   };
   return (
-    <Card>
+    <Card style={{ width: 700}}>
       <Row>
         {metricButtons.map((button) => (
           <Button
-            style={{ marginRight: "2em" }}
+            style={{ marginRight: "0em" }}
             onClick={button.changeMetric}
             type={button.value == metric ? "primary" : ""}
           >

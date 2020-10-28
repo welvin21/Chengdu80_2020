@@ -119,7 +119,7 @@ export const IndustryGraphPage = ({ industry, metric }) => {
         <Col span={4}>
           <Tooltip
             trigger={["focus"]}
-            title="Input co-relation value"
+            title="Input minimum threshold correlation value"
             placement="topLeft"
             overlayClassName="numeric-input"
           >
@@ -135,7 +135,9 @@ export const IndustryGraphPage = ({ industry, metric }) => {
         </Col>
         <Col span={6}></Col>
       </Row>
-      <IndustryGraph loading={loading} data={data} />
+      <Row >
+        <IndustryGraph loading={loading} data={data} />
+      </Row>
     </Card>
   );
 };

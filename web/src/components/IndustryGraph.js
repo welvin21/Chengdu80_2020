@@ -42,8 +42,8 @@ export const IndustryGraph = ({ data, loading }) => {
       fontSize: 12,
       strokeWidth: 3,
     },
-    height: 800,
-    width: 900,
+    height: 700,
+    width: 600,
   };
   // graph event callbacks
   const onClickGraph = function () {
@@ -92,7 +92,6 @@ export const IndustryGraph = ({ data, loading }) => {
     );
   };
 
-  console.log("Graph page here");
   return (!loading && data.nodes.length > 0) ? (
     <Graph
       id="graph-id"
@@ -111,6 +110,8 @@ export const IndustryGraph = ({ data, loading }) => {
       //   onNodePositionChange={onNodePositionChange}
     />
   ) : (
+    <div style={{ width: "100%", textAlign: 'center'}}>
     <h1>Select Stock to view coorelation</h1>
+    </div>
   );
 };
