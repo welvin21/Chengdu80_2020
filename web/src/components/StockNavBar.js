@@ -76,7 +76,7 @@ export const StockNavBar = ({ children }) => {
       <Content
         style={{ padding: "1%", height: "100%", textAlign: "left" }}
       >
-        <div className="site-layout-content">{children}</div>
+        <div className="site-layout-content" style={{ height: "100%" }}>{children}</div>
       </Content>
     </Layout>
   );

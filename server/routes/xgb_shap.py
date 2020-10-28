@@ -33,6 +33,8 @@ def get_stock_predictions():
     ticker = request.args.get('ticker')
     date = -1
 
+    np.random.seed(312)
+
     try:
         # industry_df = pd.read_csv(f'/content/industry_info/{industry}_returns.csv')
         # industry_df.set_index('date', inplace=True, drop=True)
@@ -73,15 +75,11 @@ def get_stock_predictions():
     except:
         return jsonify({})
 
+    xgb = XGBClassifier(random_state=0, seed = 312)
 
-    
-    xgb = XGBClassifier()
     xgb.fit(X.iloc[:-1], y.iloc[:-1])
 
     predict_for = pd.DataFrame(X.iloc[date]).T
-
-    # print(xgb.predict(X))
-
 
     answer = xgb.predict_proba(predict_for)[0]
     prediction = xgb.predict(predict_for)[0]

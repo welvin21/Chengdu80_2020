@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import { StockPrice } from "../components/StockPrice";
 import { useParams, Link } from "react-router-dom"
 import { Typography, Spin, Row, Col, Tag } from "antd";
+import { XGBoostPrediction, FeatureImportanceChart } from "../components";
+import { Interpretations } from "./Interpretations";
 
 const { Text, Title } = Typography;
 
 export const StockPage = () => {
   let { id } = useParams();
+
   const [stockData, setStockData] = useState({});
+  const [predictionData, setPredictionData] = useState({});
 
   useEffect(() => {
     const fetchStockData = async () => {
@@ -16,8 +20,14 @@ export const StockPage = () => {
       setStockData(fetchedData);
     }
 
-    fetchStockData();
+    const getPredictionData = async () => {
+      const response = await fetch(`http://localhost:5000/stock-predictions?ticker=${id}`)
+      const responseData = await response.json();
+      setPredictionData(responseData);
+    }
 
+    fetchStockData();
+    getPredictionData();
   }, [id]);
 
   if (!stockData) {
@@ -25,7 +35,7 @@ export const StockPage = () => {
   }
 
   return ( 
-    <div style={{ maxHeight: '100%', overflowY: 'scroll'}}>
+    <div style={{ height: '100%', overflowY: 'scroll'}}>
         <div style={{ marginBottom: "20px" }}>
           <div style={{ display: "flex", alignItems: "baseline" }}>
             <Title style={{ fontSize: "48px", fontWeight: 600, marginBottom: "0px" }}>{stockData.ticker}</Title>
@@ -41,9 +51,13 @@ export const StockPage = () => {
               <></>
           }
         </div>
-        <Row>
-          <Col span={14}>
+        <Row gutter={12} style={{ height: "100%" }}>
+          <Col span={12}>
+            <XGBoostPrediction predictionData={predictionData} />
             <StockPrice id={id}/>
+          </Col>
+          <Col span={12} style={{ backgroundColor: "white" }}>
+            <Interpretations featureImportances={predictionData.feature_importance} />
           </Col>
         </Row>
     </div>
