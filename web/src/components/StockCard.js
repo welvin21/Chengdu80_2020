@@ -1,4 +1,5 @@
 import React from "react";
+import { truncateText } from '../functions/truncateText';
 
 export const StockCard = ({ stockInfo, selected }) => {
   const { company_name: companyName, ticker, open, close } = stockInfo;
@@ -16,7 +17,7 @@ export const StockCard = ({ stockInfo, selected }) => {
     }}>
       <div>
         <p style={{ fontWeight: "bold", fontSize: 18 }}>{ticker}</p>
-        <p style={{ fontSize: 12, marginBottom: 0 }}>{companyName}</p>
+        <p style={{ fontSize: 12, marginBottom: 0 }}>{truncateText(companyName, 25)}</p>
       </div>
       <div>
         <p style={{ paddingBottom: 4, fontWeight: "bold", textAlign: "right" }}>{close}</p>
