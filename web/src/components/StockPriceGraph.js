@@ -17,7 +17,7 @@ export const StockPriceGraph = ({ isLoading, history, prediction }) => {
           type: "scatter",
           mode: "lines",
           name: "Historial Value", 
-          marker: { color: "blue" },
+          marker: { color: "#4E2286" },
         },
         {
           x: prediction.x,

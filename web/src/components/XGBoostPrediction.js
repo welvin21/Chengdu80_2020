@@ -1,25 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Typography } from "antd";
-import { useRouteMatch } from "react-router-dom";
+import { Typography, Spin } from "antd";
 
 const { Title, Text } = Typography;
 
-export const XGBoostPrediction = () => {
-  const match = useRouteMatch();
-  const { id } = match.params;
-  const [predictionData, setPredictionData] = useState({});
-  const [isUpside, setIsUpside] = useState(false);
-  
-  useEffect(() => {
-    const getPredictionData = async () => {
-      const response = await fetch(`http://localhost:5000/stock-predictions?ticker=${id}`)
-      const responseData = await response.json();
-      setPredictionData(responseData);
-      setIsUpside(parseInt(responseData.prediction) > 0 ? true : false);
-    }
+export const XGBoostPrediction = ({ predictionData }) => {
+  const [isUpside, setIsUpside] = useState();
 
-    getPredictionData();
-  }, [id]);
+  useEffect(() => {
+    setIsUpside(parseInt(predictionData.prediction) > 0 ? true : false);
+  }, [predictionData]);
 
   return (
     <div style={{ marginBottom: "18px" }}>
