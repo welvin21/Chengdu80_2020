@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Spin } from "antd";
 import { Graph } from "react-d3-graph";
 
 export const IndustryGraph = ({
@@ -13,7 +14,7 @@ export const IndustryGraph = ({
     directed: false,
     focusAnimationDuration: 0.5,
     focusZoom: 5,
-    highlightDegree: 1,
+    highlightDegree : 1,
     highlightOpacity: 1,
     maxZoom: 8,
     minZoom: 0.1,
@@ -46,8 +47,8 @@ export const IndustryGraph = ({
       fontSize: 12,
       strokeWidth: 3,
     },
-    height: 800,
-    width: 700,
+    height: 700,
+    width: 600,
   };
   // graph event callbacks
   const onClickNode = function (nodeId) {
