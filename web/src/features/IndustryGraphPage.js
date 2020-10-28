@@ -12,6 +12,7 @@ import {
 import { IndustryGraph } from "../components/IndustryGraph";
 import { usePrevious } from "../utility/hooks";
 import { IndustryStockGraph } from "../components/IndustryStockGraph";
+import { StockNodeAdjacentInfo } from '../components/StockNodeAdjacentsInfo';
 
 const { SHOW_PARENT } = TreeSelect;
 const { Title } = Typography;
@@ -145,20 +146,7 @@ export const IndustryGraphPage = ({ industry }) => {
       });
       setLoading(false);
     }
-    if (selectedNode) {
-      const nodesList = industryData.links
-        .filter(
-          (link) => link.source === selectedNode || link.target === selectedNode
-        )
-        .map((link) => {
-          if (link.source === selectedNode)
-            return { ticker: link.target, value: link.label };
-          else if (link.target === selectedNode)
-            return { ticker: link.source, value: link.label };
-        }).sort((a,b) => b.value - a.value);
-        console.log(nodesList)
-      
-    }
+    
   }, [industry, valueThreshold, selectedStocks, metric, selectedNode]);
   return (
     <Row>
@@ -210,10 +198,13 @@ export const IndustryGraphPage = ({ industry }) => {
       <Col span={12}>
         <Row style={{ backgroundColor: "#fff", marginLeft: "1em" }}>
           <Row>
-            <IndustryStockGraph ticker={selectedLink.source} color="red" />
+            <IndustryStockGraph ticker={selectedLink.source} color="#4E2286" />
           </Row>
           <Row>
-            <IndustryStockGraph ticker={selectedLink.target} color="blue" />
+            <IndustryStockGraph ticker={selectedLink.target} color="#001628" />
+          </Row>
+          <Row>
+            <StockNodeAdjacentInfo ticker={selectedNode} industryData={industryData}/>
           </Row>
         </Row>
         <Row></Row>
