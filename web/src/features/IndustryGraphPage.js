@@ -118,8 +118,8 @@ export const IndustryGraphPage = ({ industry, metric }) => {
   return (
     <Card style={{ minHeight: "85vh" }}>
       <Row>
-        <Col span={8}>
-          <TreeSelect {...tProps} />
+        <Col span={14}>
+            <TreeSelect {...tProps} />
         </Col>
         <Col span={4}>
           <Tooltip
@@ -138,7 +138,6 @@ export const IndustryGraphPage = ({ industry, metric }) => {
             />
           </Tooltip>
         </Col>
-        <Col span={6}></Col>
       </Row>
       <Row >
         <IndustryGraph loading={loading} data={data} />
