@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Menu, Input, AutoComplete } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Layout, Menu } from "antd";
 import { Link, useRouteMatch, useLocation } from "react-router-dom";
 
 const { Content, Sider } = Layout;
@@ -43,18 +42,6 @@ export const IndustryNavBar = ({ children }) => {
   };
 
   const [industries, setIndustries] = useState([])
-//   const [filteredStocks, setFilteredStocks] = useState(stockItems);
-//   const handleSearch = (value) => {
-//     let res = [];
-//     if (!value || value.indexOf("@") >= 0) {
-//       res = stockItems;
-//     } else {
-//       res = stockItems.filter(
-//         (item) => item.name.toUpperCase().indexOf(value.toUpperCase()) !== -1
-//       );
-//     }
-//     setFilteredStocks(res);
-//   };
 
   useEffect(() => { 
     fetch("http://localhost:5000/get-industry-list")
@@ -76,22 +63,6 @@ export const IndustryNavBar = ({ children }) => {
           defaultSelectedKeys={[currentSelection]}
           mode="inline"
         >
-          {/* <AutoComplete
-            style={{ width: 300, padding: "5px", margin: "auto" }}
-            options={options}
-            onSearch={handleSearch}
-            filterOption={(inputValue, option) =>
-              option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-              -1
-            }
-            open={false}
-          >
-            <Input
-              placeholder="Search Stock"
-              bordered={false}
-              suffix={<SearchOutlined />}
-            />
-          </AutoComplete> */}
           {industries.map((item) => (
             <Menu.Item key={item}>
               <Link to={`${match.url}/${item}`}>{item}</Link>
