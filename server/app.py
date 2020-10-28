@@ -5,7 +5,12 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 
 import routes.arima
+import routes.get_stock_list
+import routes.get_stock_data
+import routes.industry_graph
+import routes.get_industry_list
 import routes.xgb_shap
+
 
 @app.route('/')
 @cross_origin(supports_credentials=True)

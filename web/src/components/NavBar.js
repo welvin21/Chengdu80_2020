@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
-import { DashboardOutlined, StockOutlined } from "@ant-design/icons"
+import { DashboardOutlined, StockOutlined, BuildOutlined } from "@ant-design/icons"
 import { Link, useLocation } from "react-router-dom";
 
 const { Header, Content } = Layout;
@@ -16,6 +16,11 @@ const menuItems = [
     route: "/stocks",
     icon: <StockOutlined />,
   },
+  { 
+      name: "Industries", 
+      route: "/industry", 
+      icon: <BuildOutlined />,
+  }
 ];
 
 export const NavBar = ({ children }) => {

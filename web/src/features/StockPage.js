@@ -1,30 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { StockPriceGraph } from "../components/StockPriceGraph"
+import { StockPrice } from "../components/StockPrice";
+import { useParams } from "react-router-dom"
+import { Typography, Spin, Row, Col, Tag } from "antd";
+
+const { Text, Title } = Typography;
 
 export const StockPage = () => {
   let { id } = useParams();
-  const [dates, setDates] = useState([]);
-  const [prices, setPrices] = useState([]);
+  const [stockData, setStockData] = useState({});
+
   useEffect(() => {
-    console.log(id)
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ticker: id.toUpperCase(),
-        future_observations_count: 3,
-      }),
-    };
-    fetch("http://localhost:5000/arima-forecast", requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        const history = data["history"];
-        setDates(Object.keys(history)); 
-        const getPrices = [] 
-        dates.forEach(date => getPrices.push(history[date]))
-        setPrices(getPrices)
-      });
+    const fetchStockData = async () => {
+      const response = await fetch(`http://localhost:5000/get-stock-data?ticker=${id.toUpperCase()}`);
+      const fetchedData = await response.json()
+      setStockData(fetchedData);
+    }
+
+    fetchStockData();
+
   }, [id]);
-  return <StockPriceGraph x={dates} y={prices} />
+
+  if (!stockData) {
+    return <Spin />
+  }
+
+  return ( 
+    <div style={{ maxHeight: '100%', overflowY: 'scroll'}}>
+        <div style={{ marginBottom: "20px" }}>
+          <div style={{ display: "flex", alignItems: "baseline" }}>
+            <Title style={{ fontSize: "48px", fontWeight: 600, marginBottom: "0px" }}>{stockData.ticker}</Title>
+            <Text style={{ color: "#737373", marginLeft: "8px" }}>{stockData.company_name}</Text>
+          </div>
+          <Tag color="#001628" style={{ cursor: "pointer", marginTop: "4px" }}>{stockData.industry || "unknown"}</Tag>
+        </div>
+        <Row>
+          <Col span={14}>
+            <StockPrice id={id}/>
+          </Col>
+        </Row>
+    </div>
+  )
 };
