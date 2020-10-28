@@ -12,6 +12,9 @@ from xgboost import plot_importance, XGBClassifier
 import matplotlib.pyplot as plt
 import shap
 import time
+import ta
+from ta.volatility import BollingerBands
+from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
 
@@ -30,22 +33,53 @@ def get_stock_predictions():
     date = -1
 
     try:
+        # industry_df = pd.read_csv(f'/content/industry_info/{industry}_returns.csv')
+        # industry_df.set_index('date', inplace=True, drop=True)
+
         df = stocks[ticker].copy()
         df['return'] = df['PRC'].pct_change()
         df.drop( columns = ['COMNAM'], inplace = True)
         df.set_index('date', inplace=True, drop=True)
         df['1_day_return'] = df['return'].shift(-1)
         df['1_day_return'] = np.where(df['1_day_return'] > 0, 1, 0)
+
+        ewma = pd.Series.ewm
+
+        df['ewma_12'] = df['PRC'].transform(lambda x: ewma(x, span = 12).mean())
+        df['ewma_26'] = df['PRC'].transform(lambda x: ewma(x, span = 26).mean())
+        df['momentum_factor'] = df['ewma_12']/df['ewma_26']
+
+        df['mav'] = df['PRC'].transform(lambda x: x.rolling(window=20).mean())
+        df['mav_std'] = df['PRC'].transform(lambda x: x.rolling(window=20).std())  
+        
+        df['UltimateOscillator'] = UltimateOscillator(df['ASKHI'], df['BIDLO'], df['PRC'], fillna = True).uo()
+        df['RSIIndicator'] = RSIIndicator(df['PRC'], 14, False).rsi()
+        df['colummn'] = StochasticOscillator(df['ASKHI'], df['BIDLO'], df['PRC'], 14, 3, True).stoch()
+
+        # print("3")
+        n_fast = 12
+        n_slow = 26
+        df['MACD'] = df['ewma_26'] - df['ewma_12']
+
+        # Bollinger Bands
+        df['BollingerB_UP'] =  df['mav'] + df['mav_std']*2
+        df['BollingerB_DOWN'] = df['mav'] - df['mav_std']*2
+
         df.dropna(inplace = True)
         X = df[df.columns[~df.columns.isin(['1_day_return','TICKER'])]]
         y = df.loc[:, '1_day_return']
+
     except:
         return jsonify({})
 
+
+    
     xgb = XGBClassifier()
-    xgb.fit(X, y)
+    xgb.fit(X.iloc[:-1], y.iloc[:-1])
 
     predict_for = pd.DataFrame(X.iloc[date]).T
+
+    # print(xgb.predict(X))
 
 
     answer = xgb.predict_proba(predict_for)[0]
@@ -53,7 +87,7 @@ def get_stock_predictions():
     confidence = max(answer) * 100
     
     print('Predicted Label:', prediction)
-    print('Confidence:', confidence * 100)
+    print('Confidence:', confidence)
 
     results = {
         'prediction' : str(prediction),
