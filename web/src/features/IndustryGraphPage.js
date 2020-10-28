@@ -5,8 +5,9 @@ import { usePrevious } from "../utility/hooks";
 
 const { SHOW_PARENT } = TreeSelect;
 
-export const IndustryGraphPage = ({industry, metric}) => {
+export const IndustryGraphPage = ({ industry, metric }) => {
   const prevIndustry = usePrevious(industry);
+  const prevMetric = usePrevious(metric);
   const [data, setData] = useState({ nodes: [], links: [] });
   const [industryData, setIndustryData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,19 +39,50 @@ export const IndustryGraphPage = ({industry, metric}) => {
 
   useEffect(() => {
     setLoading(true);
-    setData({ nodes: [], links: [] });
-    if (prevIndustry !== industry){ 
-        setSelectedStocks([]);
-        setValueThreshold(0.8);
+    // setData({ nodes: [], links: [] });
+    if (prevIndustry !== industry) {
+      setSelectedStocks([]);
+      setValueThreshold(0.8);
     }
-    if (prevIndustry !== industry || industryData.length === 0) {
-      fetch(`http://localhost:5000/get-industry-graph?industry=${industry}&metric=${metric}`)
+    if (
+      prevIndustry !== industry ||
+      industryData.length === 0 ||
+      prevMetric !== metric
+    ) {
+      fetch(
+        `http://localhost:5000/get-industry-graph?industry=${industry}&metric=${metric}`
+      )
         .then((response) => response.json())
         .then((data) => {
-          setIndustryData(data);  
+          const industryData = data;
+          setIndustryData(data);
+          const stocks = industryData.nodes.map(({ id }) => ({
+            title: id,
+            value: id,
+            key: id,
+          }));
+          setStocksList(stocks);
+          const filteredLinks = industryData.links.filter(
+            (item) =>
+              Math.abs(item.label) > valueThreshold &&
+              (selectedStocks.includes(item.source) ||
+                selectedStocks.includes(item.target))
+          );
+          const filteredNodes = new Set();
+          filteredLinks.forEach(({ source, target }) => {
+            filteredNodes.add(source);
+            filteredNodes.add(target);
+          });
+          const filteredNodesArray = Array.from(filteredNodes).map((node) => ({
+            id: node,
+          }));
+          setData({
+            nodes: filteredNodesArray,
+            links: filteredLinks,
+          });
+          setLoading(false);
         });
-    }
-    if (industryData.length !== 0) {
+    } else if (industryData.length !== 0) {
       const stocks = industryData.nodes.map(({ id }) => ({
         title: id,
         value: id,
@@ -76,9 +108,8 @@ export const IndustryGraphPage = ({industry, metric}) => {
         links: filteredLinks,
       });
       setLoading(false);
-    } 
-
-  }, [prevIndustry, industry, valueThreshold, selectedStocks, industryData]);
+    }
+  }, [industry, valueThreshold, selectedStocks, metric]);
   return (
     <Card style={{ minHeight: "85vh" }}>
       <Row>
@@ -104,11 +135,7 @@ export const IndustryGraphPage = ({industry, metric}) => {
         </Col>
         <Col span={6}></Col>
       </Row>
-      {data.nodes.length > 0 ? (
-        <IndustryGraph loading={loading} data={data} />
-      ) : (
-        <h1>Select stocks to find co-relations</h1>
-      )}
+      <IndustryGraph loading={loading} data={data} />
     </Card>
   );
 };
