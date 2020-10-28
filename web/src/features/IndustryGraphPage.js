@@ -14,6 +14,12 @@ export const IndustryGraphPage = ({ industry, metric }) => {
   const [valueThreshold, setValueThreshold] = useState(0.8);
   const [stocksList, setStocksList] = useState([]);
   const [selectedStocks, setSelectedStocks] = useState([]);
+  const [selectedNode, setSelectedNode] = useState();
+  const [selectedLink, setSelectedLink] = useState({
+    source: "",
+    target: "",
+    label: "",
+  });
   const onChange = (value) => {
     if (isNaN(value)) {
       return;
@@ -36,7 +42,7 @@ export const IndustryGraphPage = ({ industry, metric }) => {
       width: "100%",
     },
   };
-
+  console.log({selectedNode, selectedLink})
   useEffect(() => {
     setLoading(true);
     // setData({ nodes: [], links: [] });
@@ -135,7 +141,9 @@ export const IndustryGraphPage = ({ industry, metric }) => {
         </Col>
         <Col span={6}></Col>
       </Row>
-      <IndustryGraph loading={loading} data={data} />
+
+      <IndustryGraph loading={loading} data={data} setSelectedNode={setSelectedNode} setSelectedLink={setSelectedLink}/>
+
     </Card>
   );
 };
