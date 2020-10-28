@@ -9,7 +9,7 @@ export const IndustryGraph = ({ data, loading }) => {
     directed: false,
     focusAnimationDuration: 0.75,
     focusZoom: 5,
-    highlightDegree: 1,
+    highlightDegree : 1,
     highlightOpacity: 1,
     maxZoom: 8,
     minZoom: 0.1,
@@ -19,9 +19,9 @@ export const IndustryGraph = ({ data, loading }) => {
     staticGraphWithDragAndDrop: false,
     linkHighlightBehavior: true,
     d3: {
-      alphaTarget: 0.3,
-      gravity: 55,
-      linkLength: 500,
+      alphaTarget: 0.05,
+      gravity: -400,
+      linkLength: 400,
       linkStrength: 1,
       disableLinkForce: false,
     },
@@ -29,7 +29,7 @@ export const IndustryGraph = ({ data, loading }) => {
       color: "#4E2286",
       highlightStrokeColor: "blue",
       labelProperty: "name",
-      size:500,
+      size: 500,
       fontSize: 18,
       fontWeight: "bold",
       highlightFontSize: 20,
@@ -39,12 +39,11 @@ export const IndustryGraph = ({ data, loading }) => {
       highlightColor: "#4E2286",
       renderLabel: true,
       highlightFontSize: 14,
-      fontSize:12, 
-      strokeWidth:3,
-
+      fontSize: 12,
+      strokeWidth: 3,
     },
     height: 800,
-    width: 900
+    width: 900,
   };
   // graph event callbacks
   const onClickGraph = function () {
@@ -93,10 +92,8 @@ export const IndustryGraph = ({ data, loading }) => {
     );
   };
 
-  
-  return loading ? (
-    <Spin style={{ marginTop: "auto", marginBotton: "auto" }} />
-  ) : (
+  console.log("Graph page here");
+  return (!loading && data.nodes.length > 0) ? (
     <Graph
       id="graph-id"
       data={data}
@@ -104,14 +101,16 @@ export const IndustryGraph = ({ data, loading }) => {
       onClickNode={onClickNode}
       onDoubleClickNode={onDoubleClickNode}
       onRightClickNode={onRightClickNode}
-    //   onClickGraph={onClickGraph}
+      //   onClickGraph={onClickGraph}
       onClickLink={onClickLink}
       onRightClickLink={onRightClickLink}
       //   onMouseOverNode={onMouseOverNode}
       //   onMouseOutNode={onMouseOutNode}
       //   onMouseOverLink={onMouseOverLink}
       //   onMouseOutLink={onMouseOutLink}
-    //   onNodePositionChange={onNodePositionChange}
+      //   onNodePositionChange={onNodePositionChange}
     />
+  ) : (
+    <h1>Select Stock to view coorelation</h1>
   );
 };
