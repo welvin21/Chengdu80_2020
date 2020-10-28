@@ -9,7 +9,14 @@ import math
 def get_industry_graph():
     industry = request.args.get('industry')
     industry = industry.replace(' ', '_').lower()
-    industry_links = pd.read_csv("../database/graphs/"+industry+".csv", sep=',')
+    metric = request.args.get('metric', 'pearson')
+    metric = metric.lower()
+
+    try:
+        industry_links = pd.read_csv(f"../database/graphs/{metric}/{industry}.csv", sep=',')
+    except:
+        industry_links = pd.read_csv(f"../database/graphs/pearson/{industry}.csv", sep=',') 
+
     tickers = industry_links['tickers']
     links = [] 
     for i in range(len(tickers)): 
@@ -17,7 +24,7 @@ def get_industry_graph():
             links.append({
                     "source": tickers[i],
                     "target": tickers[j], 
-                    "label": round(industry_links[tickers[i]][j],2) 
+                    "label": round(industry_links[tickers[i]][j],3) 
                 }) 
     nodes = [] 
     for ticker in tickers: 
