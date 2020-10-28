@@ -35,6 +35,7 @@ export const NavBar = ({ children }) => {
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={[currentSelection]}
+          selectedKeys={[currentSelection]}
         >
           {menuItems.map((item) => (
             <Menu.Item key={item.route} icon={item.icon}>

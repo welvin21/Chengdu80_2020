@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StockPrice } from "../components/StockPrice";
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import { Typography, Spin, Row, Col, Tag } from "antd";
 
 const { Text, Title } = Typography;
@@ -31,7 +31,15 @@ export const StockPage = () => {
             <Title style={{ fontSize: "48px", fontWeight: 600, marginBottom: "0px" }}>{stockData.ticker}</Title>
             <Text style={{ color: "#737373", marginLeft: "8px" }}>{stockData.company_name}</Text>
           </div>
-          <Tag color="#001628" style={{ cursor: "pointer", marginTop: "4px" }}>{stockData.industry || "unknown"}</Tag>
+          {
+            stockData.industry ? 
+              <Link to={`/industry/${stockData.industry}`}>
+                <Tag color="#001628" style={{ cursor: "pointer", marginTop: "4px" }}>
+                  {stockData.industry}
+                </Tag> 
+              </Link> :
+              <></>
+          }
         </div>
         <Row>
           <Col span={14}>

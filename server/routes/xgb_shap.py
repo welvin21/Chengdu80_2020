@@ -12,9 +12,12 @@ from xgboost import plot_importance, XGBClassifier
 import matplotlib.pyplot as plt
 import shap
 import time
+<<<<<<< HEAD
 import ta
 from ta.volatility import BollingerBands
 from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
+=======
+>>>>>>> master
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
 
