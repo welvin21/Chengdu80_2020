@@ -12,7 +12,7 @@ import routes.get_industry_list
 import routes.xgb_shap
 import routes.get_returns_data
 import routes.get_diversify_recommendations
-
+import routes.get_news_sentiments
 
 @app.route('/')
 @cross_origin(supports_credentials=True)
