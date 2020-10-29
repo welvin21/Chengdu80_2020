@@ -17,20 +17,17 @@ from ta.volatility import BollingerBands
 from ta.trend import ADXIndicator
 from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
 
+transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
 
+stocks = {}
+
+for ticker in transaction_data['TICKER'].unique():
+    stock = transaction_data[transaction_data['TICKER'] == ticker]
+    stocks[ticker] = stock
     
-
 @app.route('/stock-predictions', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_stock_predictions():
-    transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
-
-    stocks = {}
-
-    for ticker in transaction_data['TICKER'].unique():
-        stock = transaction_data[transaction_data['TICKER'] == ticker]
-        stocks[ticker] = stock
-        
     start = time.time()
     ticker = request.args.get('ticker')
     date = -1

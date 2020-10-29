@@ -13,7 +13,7 @@ export const IndustryStockGraph = ({ ticker, color }) => {
           day.date.split(String.fromCharCode(47)).join("-")
         );
         const closingPrice = marketData.map((day) => day.close);
-        setData({ x: dates, y: closingPrice });
+        setData({ x: dates, y: closingPrice }); 
         setLoading(false);
       });
   }, [ticker]);
