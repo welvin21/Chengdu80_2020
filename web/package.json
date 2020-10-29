@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
     "@craco/craco": "^5.7.0",
+    "@mdx-js/react": "^1.6.19",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -15,6 +16,7 @@
     "react": "^17.0.1",
     "react-d3-graph": "^2.5.0",
     "react-dom": "^17.0.1",
+    "react-markdown": "^5.0.2",
     "react-plotly.js": "^2.5.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
