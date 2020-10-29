@@ -98,14 +98,69 @@ def get_stock_predictions():
     answer = xgb.predict_proba(predict_for)[0]
     prediction = xgb.predict(predict_for)[0]
     confidence = max(answer) * 100
+
+    feature_scores = xgb._Booster.get_score()
     
-    print('Predicted Label:', prediction)
-    print('Confidence:', confidence)
+    descriptors = {'OPENPRC': 'The open price', 
+               'SHROUT': 'The number of shares outstanding', 
+               'Moving_Avg': 'The average price of the stock over a rolling window of 20 days', 
+               'Ultimate_Oscillator': 'Larry Williams’ (1976) signal, a momentum oscillator designed to capture momentum across three different timeframes.',
+               'VOL': 'The volume traded today',
+               'Stochastic_Oscillator': 'Developed in the late 1950s by George Lane. The stochastic oscillator presents the location of the closing price of a stock in relation to the high and low range of the price of a stock over a period of time, typically a 14-day period.',
+               'BIDLO': 'The lowest bid price today',
+               'ASKHI': 'The highest asking price today',
+               'Slow_Exp_Moving_Avg': 'This is a first-order infinite impulse response filter that applies weighting factors which decrease exponentially. Basically, a fancy moving average.',
+               'return': 'The return of the stock today, i.e. perentage change from the price yesterday to the price today',
+               'RSI_Indicator': 'Compares the magnitude of recent gains and losses over a specified time period to measure speed and change of price movements of a security. It is primarily used to attempt to identify overbought or oversold conditions in the trading of an asset.',
+               'BollingerB_DOWN': 'Developed by John Bollinger, Bollinger Bands® are volatility bands placed above and below a moving average. Volatility is based on the standard deviation, which changes as volatility increases and decreases',
+               'BollingerB_UP': 'Developed by John Bollinger, Bollinger Bands® are volatility bands placed above and below a moving average. Volatility is based on the standard deviation, which changes as volatility increases and decreases',
+               'Momentum_Factor': 'Simple Momentum of the stock',
+               'PRC': 'The closing price of the stock',
+               'MACD': 'A trend-following momentum indicator that shows the relationship between two moving averages of prices. The MACD is calculated by subtracting the 26-day exponential moving average (EMA) from the 12-day EMA',
+               'Fast_Exp_Moving_Avg': 'This is a first-order infinite impulse response filter that applies weighting factors which decrease exponentially. Basically, a fancy moving average.',
+               'avg_industry_return': 'The Average returns of the industry the stock is a part of.',
+               'Moving_Std_Deviation': 'The standard deviation over a period of 20-days'
+               }
+
+    links = {'OPENPRC': '', 
+            'SHROUT': '', 
+            'Moving_Avg': 'https://en.wikipedia.org/wiki/Moving_average', 
+            'Ultimate_Oscillator': 'http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:ultimate_oscillator',
+            'VOL': '',
+            'Stochastic_Oscillator': 'https://school.stockcharts.com/doku.php?id=technical_indicators:stochastic_oscillator_fast_slow_and_full',
+            'BIDLO': '',
+            'ASKHI': '',
+            'Slow_Exp_Moving_Avg': 'https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average',
+            'return': '',
+            'RSI_Indicator': 'https://www.investopedia.com/terms/r/rsi.asp',
+            'BollingerB_DOWN': 'https://school.stockcharts.com/doku.php?id=technical_indicators:bollinger_bands',
+            'BollingerB_UP': 'https://school.stockcharts.com/doku.php?id=technical_indicators:bollinger_bands',
+            'Momentum_Factor': 'https://school.stockcharts.com/doku.php?id=technical_indicators:rate_of_change_roc_and_momentum',
+            'PRC': '',
+            'MACD': 'https://www.investopedia.com/terms/m/macd.asp',
+            'Fast_Exp_Moving_Avg': 'https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average',
+            'avg_industry_return': '',
+            'Moving_Std_Deviation': 'https://en.wikipedia.org/wiki/Moving_average'
+            }
+
+    classes = ['High', 'High', 'High', 'Medium', 'Medium', 'Medium', 'Medium', 'Medium', 'Low', 'Low', 'Low', 'Low', 'Low', 'Low',  'Almost None', 'Almost None', 'Almost None', 'Almost None', 'Almost None', 'Almost None']
+
+    scores = [[feature, weight]for feature, weight in feature_scores.items()]
+
+    scores.sort(key = lambda x: x[1], reverse = True)
+
+    for i, score in enumerate(scores):
+        feature = score[0]
+        score[1] = str(score[1])
+        score.append(classes[i])
+        score.append(descriptors[feature])
+        score.append(links[feature])
 
     results = {
         'prediction' : str(prediction),
         'confidence' : str(confidence),
-        'feature_importance': xgb._Booster.get_score()
+        'feature_importance': feature_scores,
+        'descriptions' : scores 
     }
     end = time.time()
 
