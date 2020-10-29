@@ -36,11 +36,25 @@ export const Interpretations = ({ featureImportances, descriptions }) => {
           </Title>
           <FeatureImportanceChart featureImportances={featureImportances} />
           <List
+            itemLayout="vertical"
             size="large"
-            header={<h2>What do these means?</h2>}
-            bordered
+            header={<h2>What do these mean?</h2>}
+            pagination={{
+              onChange: page => {
+                console.log(page);
+              },
+              pageSize: 3,
+            }}
             dataSource={data}
-            renderItem={item => <List.Item>{item}</List.Item>}
+            renderItem={item => (
+              <List.Item key={item.title}>
+                <List.Item.Meta
+                  title={<a href={item.href}>{item.title}</a>}
+                  description={item.description}
+                />
+                {item.content}
+              </List.Item>
+            )}
           />
         </TabPane>
         <TabPane tab="News" key="3">
