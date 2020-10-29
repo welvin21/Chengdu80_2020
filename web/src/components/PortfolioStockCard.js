@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IndustryStockGraph } from "./IndustryStockGraph";
 import { Card, Typography } from "antd";
 
-const { Text } = Typography
+const { Text } = Typography;
 
 export const PortfolioStockCard = ({ ticker }) => {
   const [predictionData, setPredictionData] = useState({});
@@ -17,6 +17,7 @@ export const PortfolioStockCard = ({ ticker }) => {
       setPredictionData(responseData);
       setIsUpside(parseInt(responseData.prediction) > 0 ? true : false);
     };
+    getPredictionData();
   }, [ticker]);
   return (
     <Card bordered={true} style={{ width: "25%" }}>
