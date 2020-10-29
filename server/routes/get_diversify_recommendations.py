@@ -1,8 +1,9 @@
 from app import app
 import pandas as pd
 from flask import request,jsonify
+from flask_cors import cross_origin
 import numpy as np
-import csv 
+import csv
 import math
 
 allreturns = pd.read_csv(f"../database/industry_info/all_stocks_returns.csv", sep=',')
@@ -11,8 +12,9 @@ def spearman_corr(first, second):
     return first.corr(second, method='spearman')
 
 @app.route('/get-diversify-recommendations', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def get_diversify_recommendations():
-    req_data = request.get_json() 
+    req_data = request.get_json()
     portfolio = req_data['portfolio']
 
     dates = allreturns['date']
