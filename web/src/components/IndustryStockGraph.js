@@ -5,21 +5,21 @@ export const IndustryStockGraph = ({ ticker, color }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch(`http://localhost:5000/get-stock-data?ticker=${ticker}`)
-      .then((response) => response.json())
-      .then((data) => {
+    fetch(`http://18.162.36.52:5000/get-stock-data?ticker=${ticker}`)
+      .then(response => response.json())
+      .then(data => {
         const marketData = data["market_data"];
-        const dates = marketData.map((day) =>
+        const dates = marketData.map(day =>
           day.date.split(String.fromCharCode(47)).join("-")
         );
-        const closingPrice = marketData.map((day) => day.close);
-        setData({ x: dates, y: closingPrice }); 
+        const closingPrice = marketData.map(day => day.close);
+        setData({ x: dates, y: closingPrice });
         setLoading(false);
       });
   }, [ticker]);
   return (
     <Plot
-      style={{ width: "100%", height:"20em", marginBottom:"2em"}}
+      style={{ width: "100%", height: "20em", marginBottom: "2em" }}
       data={[
         {
           x: data.x,
@@ -31,7 +31,7 @@ export const IndustryStockGraph = ({ ticker, color }) => {
         },
       ]}
       layout={{
-        title:`${ticker} Stock Prices 2012`,
+        title: `${ticker} Stock Prices 2012`,
         autosize: true,
         xaxis: {
           type: "date",
