@@ -73,7 +73,7 @@ def get_stock_predictions():
         df['BollingerB_DOWN'] = df['Moving_Avg'] - df['Moving_Std_Deviation']*2
 
         if stocks_industry.get(ticker) != None:
-            industry = stocks_industry.get(ticker)
+            industry = stocks_industry.get(ticker).lower().replace(" ", "_")
 
             industry_df = pd.read_csv(f'../database/industry_info/{industry}_returns.csv')
             industry_df.set_index('date', inplace=True, drop=True)

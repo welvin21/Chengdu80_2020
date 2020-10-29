@@ -51,11 +51,18 @@ export const StockPage = () => {
             {stockData.ticker}
           </Title>
           <div style={{ marginLeft: "8px" }}>
-            <Text style={{ color: "#737373", marginRight: "8px", display: "block" }}>
+            <Text
+              style={{ color: "#737373", marginRight: "8px", display: "block" }}
+            >
               {stockData.company_name}
             </Text>
             {stockData.industry ? (
-              <Link to={`/industry/${stockData.industry}`}>
+              <Link
+                to={{
+                  pathname: `/industry/${stockData.industry}`,
+                  state: { ticker: id },
+                }}
+              >
                 <Tag
                   color="#001628"
                   style={{ cursor: "pointer", marginTop: "4px" }}
@@ -82,6 +89,7 @@ export const StockPage = () => {
         <Col span={12} style={{ backgroundColor: "white" }}>
           <Interpretations
             featureImportances={predictionData.feature_importance}
+            descriptions={predictionData.descriptions}
           />
         </Col>
       </Row>
