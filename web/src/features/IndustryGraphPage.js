@@ -24,7 +24,7 @@ export const IndustryGraphPage = ({ industry }) => {
   const [data, setData] = useState({ nodes: [], links: [] });
   const [industryData, setIndustryData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [valueThreshold, setValueThreshold] = useState(0.8);
+  const [valueThreshold, setValueThreshold] = useState(0.7);
   const [stocksList, setStocksList] = useState([]);
   const [selectedStocks, setSelectedStocks] = useState([]);
   const [selectedNode, setSelectedNode] = useState();
@@ -76,10 +76,9 @@ export const IndustryGraphPage = ({ industry }) => {
   };
   useEffect(() => {
     setLoading(true);
-    // setData({ nodes: [], links: [] });
     if (prevIndustry !== industry) {
       setSelectedStocks([]);
-      setValueThreshold(0.8);
+      setValueThreshold(0.7);
     }
     if (
       prevIndustry !== industry ||

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
-import { Spin } from "antd";
 
 export const IndustryStockGraph = ({ ticker, color }) => {
   const [data, setData] = useState([]);
