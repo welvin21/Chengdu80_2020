@@ -4,7 +4,11 @@ import { Routes } from "./components";
 import { PortfolioContext } from "./context";
 
 function App() {
-  const [portfolio, setPortfolio] = useState([{ ticker: "AAPL" }]);
+  const localStorage = window.localStorage;
+  const localStoragePortfolio =
+    JSON.parse(localStorage.getItem("portfolio")) || [];
+
+  const [portfolio, setPortfolio] = useState(localStoragePortfolio);
 
   return (
     <PortfolioContext.Provider value={{ portfolio, setPortfolio }}>
