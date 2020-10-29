@@ -88,6 +88,7 @@ export const StockPage = () => {
         </Col>
         <Col span={12} style={{ backgroundColor: "white" }}>
           <Interpretations
+            ticker={id}
             featureImportances={predictionData.feature_importance}
             descriptions={predictionData.descriptions}
           />

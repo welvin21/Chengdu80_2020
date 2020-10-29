@@ -9,7 +9,11 @@ const { Title } = Typography;
 
 const { TabPane } = Tabs;
 
-export const Interpretations = ({ featureImportances, descriptions }) => {
+export const Interpretations = ({
+  ticker,
+  featureImportances,
+  descriptions,
+}) => {
   const location = useLocation();
   console.log(descriptions);
   let data = [];
@@ -58,7 +62,7 @@ export const Interpretations = ({ featureImportances, descriptions }) => {
           />
         </TabPane>
         <TabPane tab="News" key="3">
-          <NewsList ticker="AAPL" />
+          <NewsList ticker={ticker} />
         </TabPane>
       </Tabs>
     </>
