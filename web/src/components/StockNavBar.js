@@ -17,22 +17,22 @@ export const StockNavBar = ({ children }) => {
 
   useEffect(() => {
     const fetchStockList = async () => {
-      const response = await fetch("http://localhost:5000/get-stock-list");
+      const response = await fetch("http://18.162.36.52:5000/get-stock-list");
       const stockListData = await response.json();
       setStockList(stockListData);
       setFilteredStocks(stockListData);
-    }
+    };
 
     fetchStockList();
-  }, [])
+  }, []);
 
-  const handleSearch = (value) => {
+  const handleSearch = value => {
     let res = [];
     if (!value || value.indexOf("@") >= 0) {
       res = stockList;
     } else {
       res = stockList.filter(
-        (stock) => stock.ticker.toUpperCase().indexOf(value.toUpperCase()) !== -1
+        stock => stock.ticker.toUpperCase().indexOf(value.toUpperCase()) !== -1
       );
     }
     setFilteredStocks(res);
@@ -40,9 +40,7 @@ export const StockNavBar = ({ children }) => {
 
   return (
     <Layout style={{ height: "100%" }}>
-      <Sider
-        width={300}
-      >
+      <Sider width={300}>
         <div className="logo" />
         <Menu
           theme="dark"
@@ -51,7 +49,13 @@ export const StockNavBar = ({ children }) => {
           style={{ height: "100%", overflow: "auto" }}
         >
           <AutoComplete
-            style={{ width: 300, padding: "5px", margin: "auto", position: 'absolute', backgroundColor: '#001628' }}
+            style={{
+              width: 300,
+              padding: "5px",
+              margin: "auto",
+              position: "absolute",
+              backgroundColor: "#001628",
+            }}
             onSearch={handleSearch}
             filterOption={(inputValue, option) =>
               option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
@@ -65,18 +69,25 @@ export const StockNavBar = ({ children }) => {
               suffix={<SearchOutlined />}
             />
           </AutoComplete>
-          <div style={{ height: 40}}></div>
-          {filteredStocks.map((stock) => (
-            <Link key={stock.ticker} to={`${match.url}/${stock.ticker}`} style={{ color: "white" }}>
-              <StockCard stockInfo={stock} selected={currentSelection === stock.ticker} />
+          <div style={{ height: 40 }}></div>
+          {filteredStocks.map(stock => (
+            <Link
+              key={stock.ticker}
+              to={`${match.url}/${stock.ticker}`}
+              style={{ color: "white" }}
+            >
+              <StockCard
+                stockInfo={stock}
+                selected={currentSelection === stock.ticker}
+              />
             </Link>
           ))}
         </Menu>
       </Sider>
-      <Content
-        style={{ padding: "1%", height: "100%", textAlign: "left" }}
-      >
-        <div className="site-layout-content" style={{ height: "100%" }}>{children}</div>
+      <Content style={{ padding: "1%", height: "100%", textAlign: "left" }}>
+        <div className="site-layout-content" style={{ height: "100%" }}>
+          {children}
+        </div>
       </Content>
     </Layout>
   );

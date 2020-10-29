@@ -19,7 +19,7 @@ export const StockPage = () => {
     setPredictionData(null);
     const fetchStockData = async () => {
       const response = await fetch(
-        `http://localhost:5000/get-stock-data?ticker=${id.toUpperCase()}`
+        `http://18.162.36.52:5000/get-stock-data?ticker=${id.toUpperCase()}`
       );
       const fetchedData = await response.json();
       setStockData(fetchedData);
@@ -27,7 +27,7 @@ export const StockPage = () => {
 
     const getPredictionData = async () => {
       const response = await fetch(
-        `http://localhost:5000/stock-predictions?ticker=${id}`
+        `http://18.162.36.52:5000/stock-predictions?ticker=${id}`
       );
       const responseData = await response.json();
       setPredictionData(responseData);

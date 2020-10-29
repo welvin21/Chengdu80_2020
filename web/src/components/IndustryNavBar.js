@@ -10,35 +10,31 @@ export const IndustryNavBar = ({ children }) => {
   const pathname = location.pathname;
   const currentSelection = pathname.split("/")[2];
 
-  const [industries, setIndustries] = useState([])
+  const [industries, setIndustries] = useState([]);
 
-  useEffect(() => { 
-    fetch("http://localhost:5000/get-industry-list")
-    .then(response => response.json())
-    .then(data => setIndustries(data.industry_list))
-  }, [])
+  useEffect(() => {
+    fetch("http://18.162.36.52:5000/get-industry-list")
+      .then(response => response.json())
+      .then(data => setIndustries(data.industry_list));
+  }, []);
 
   return (
     <Layout style={{ height: "100%" }}>
-      <Sider
-        width={200}
-      >
+      <Sider width={200}>
         <div className="logo" />
         <Menu
           theme="dark"
           defaultSelectedKeys={[currentSelection]}
           mode="inline"
         >
-          {industries.map((item) => (
+          {industries.map(item => (
             <Menu.Item key={item}>
               <Link to={`${match.url}/${item}`}>{item}</Link>
             </Menu.Item>
           ))}
         </Menu>
       </Sider>
-      <Content
-        style={{ padding: "1%", height: "100%", textAlign: "left" }}
-      >
+      <Content style={{ padding: "1%", height: "100%", textAlign: "left" }}>
         <div className="site-layout-content">{children}</div>
       </Content>
     </Layout>

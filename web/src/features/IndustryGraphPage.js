@@ -87,7 +87,7 @@ export const IndustryGraphPage = ({ industry }) => {
       prevMetric !== metric
     ) {
       fetch(
-        `http://localhost:5000/get-industry-graph?industry=${industry}&metric=${metric}`
+        `http://18.162.36.52:5000/get-industry-graph?industry=${industry}&metric=${metric}`
       )
         .then(response => response.json())
         .then(data => {
