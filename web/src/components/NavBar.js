@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Menu } from "antd";
-import { DashboardOutlined, StockOutlined, BuildOutlined } from "@ant-design/icons"
+import { DashboardOutlined, StockOutlined, BuildOutlined, BookOutlined } from "@ant-design/icons"
 import { Link, useLocation } from "react-router-dom";
 
 const { Header, Content } = Layout;
@@ -20,6 +20,11 @@ const menuItems = [
       name: "Industries", 
       route: "/industry", 
       icon: <BuildOutlined />,
+  }, 
+  { 
+      name: "Glossary", 
+      route: "/glossary", 
+      icon: <BookOutlined />,
   }
 ];
 
