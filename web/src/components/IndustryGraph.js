@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { Spin } from "antd";
 import { Graph } from "react-d3-graph";
 
-export const IndustryGraph = ({ industry }) => {
-  const [data, setData] = useState({"nodes": [], "links":[]});
-  const [valueThreshold, setValueThreshold] = useState(0.7);
-  const [loading, setLoading] = useState(true);
+export const IndustryGraph = ({
+  data,
+  loading,
+  setSelectedNode,
+  setSelectedLink,
+}) => {
   const myConfig = {
     automaticRearrangeAfterDropNode: false,
     collapsible: false,
     directed: false,
-    focusAnimationDuration: 0.75,
+    focusAnimationDuration: 0.5,
     focusZoom: 5,
-    highlightDegree: 1,
+    highlightDegree : 1,
     highlightOpacity: 1,
-    linkHighlightBehavior: false,
     maxZoom: 8,
     minZoom: 0.1,
     nodeHighlightBehavior: true,
@@ -22,8 +24,8 @@ export const IndustryGraph = ({ industry }) => {
     staticGraphWithDragAndDrop: false,
     linkHighlightBehavior: true,
     d3: {
-      alphaTarget: 0.4,
-      gravity: 55,
+      alphaTarget: 0.05,
+      gravity: -400,
       linkLength: 400,
       linkStrength: 1,
       disableLinkForce: false,
@@ -32,7 +34,7 @@ export const IndustryGraph = ({ industry }) => {
       color: "#4E2286",
       highlightStrokeColor: "blue",
       labelProperty: "name",
-      size:500,
+      size: 500,
       fontSize: 18,
       fontWeight: "bold",
       highlightFontSize: 20,
@@ -42,98 +44,29 @@ export const IndustryGraph = ({ industry }) => {
       highlightColor: "#4E2286",
       renderLabel: true,
       highlightFontSize: 14,
-      fontSize:12, 
-      strokeWidth:3,
-
+      fontSize: 12,
+      strokeWidth: 3,
     },
-    height: 800,
-    width: 900
+    height: 700,
+    width: 600,
   };
   // graph event callbacks
-  const onClickGraph = function () {
-    window.alert(`Clicked the graph background`);
-  };
-
   const onClickNode = function (nodeId) {
-    window.alert(`Clicked node ${nodeId}`);
+    setSelectedNode(nodeId);
   };
 
-  const onDoubleClickNode = function (nodeId) {
-    window.alert(`Double clicked node ${nodeId}`);
+  const onClickLink = function (source, target, labelProperty) {
+    setSelectedLink({ source, target, labelProperty });
   };
-
-  const onRightClickNode = function (event, nodeId) {
-    window.alert(`Right clicked node ${nodeId}`);
-  };
-
-  const onMouseOverNode = function (nodeId) {
-    window.alert(`Mouse over node ${nodeId}`);
-  };
-
-  const onMouseOutNode = function (nodeId) {
-    window.alert(`Mouse out node ${nodeId}`);
-  };
-
-  const onClickLink = function (source, target) {
-    window.alert(`Clicked link between ${source} and ${target}`);
-  };
-
-  const onRightClickLink = function (event, source, target) {
-    window.alert(`Right clicked link between ${source} and ${target}`);
-  };
-
-  const onMouseOverLink = function (source, target) {
-    window.alert(`Mouse over in link between ${source} and ${target}`);
-  };
-
-  const onMouseOutLink = function (source, target) {
-    window.alert(`Mouse out link between ${source} and ${target}`);
-  };
-
-  const onNodePositionChange = function (nodeId, x, y) {
-    window.alert(
-      `Node ${nodeId} is moved to new position. New position is x= ${x} y= ${y}`
-    );
-  };
-
-  useEffect(() => {
-      setLoading(true); 
-      setData({"nodes": [], "links":[]});
-    fetch(`http://localhost:5000/get-industry-graph?industry=${industry}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const filteredLinks = data.links.filter(item => Math.abs(item.label) > valueThreshold)
-        const filteredNodes = new Set();
-        filteredLinks.forEach(({source,target}) => {
-            filteredNodes.add(source); 
-            filteredNodes.add(target)
-        }); 
-        const filteredNodesArray = Array.from(filteredNodes).map(node=> ({"id":node}) )
-        setData({ 
-            nodes: filteredNodesArray,
-            links: filteredLinks, 
-        }); 
-        setLoading(false);
-      });
-  },[industry, valueThreshold]);
-  return loading ? (
-    <div>loading</div>
-  ) : (
+  return !loading && data.nodes.length > 0 ? (
     <Graph
       id="graph-id"
       data={data}
       config={myConfig}
       onClickNode={onClickNode}
-      onDoubleClickNode={onDoubleClickNode}
-      onRightClickNode={onRightClickNode}
-      onClickGraph={onClickGraph}
       onClickLink={onClickLink}
-      onRightClickLink={onRightClickLink}
-      //   onMouseOverNode={onMouseOverNode}
-      //   onMouseOutNode={onMouseOutNode}
-      //   onMouseOverLink={onMouseOverLink}
-      //   onMouseOutLink={onMouseOutLink}
-    //   onNodePositionChange={onNodePositionChange}
     />
+  ) : (
+    <h1>Select Stock to view coorelation</h1>
   );
 };
