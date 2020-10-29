@@ -14,7 +14,7 @@ import routes.get_returns_data
 import routes.get_diversify_recommendations
 import routes.get_news_sentiments
 import routes.get_stock_data_by_industry
-
+import routes.get_news_headline_link
 
 @app.route('/')
 @cross_origin(supports_credentials=True)
