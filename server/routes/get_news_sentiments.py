@@ -16,10 +16,10 @@ def get_news_sentiments():
 
     for _, row in news_df[::-1].iterrows():
         if(row['sentimentClass'] == 1):
-            positive.append({ "headline": row['headline'], "date": row['date'], "score": row['sentimentPositive']})
+            positive.append({ "headline": row['headline'], "date": row['date'], "score": round(row['sentimentPositive'],3)})
         elif(row['sentimentClass'] == -1):
-            negative.append({ "headline": row['headline'], "date": row['date'], "score": row['sentimentNegative']})
+            negative.append({ "headline": row['headline'], "date": row['date'], "score": round(row['sentimentNegative'],3)})
         else:
-            neutral.append({ "headline": row['headline'], "date": row['date'], "score": row['sentimentNeutral']})
+            neutral.append({ "headline": row['headline'], "date": row['date'], "score": round(row['sentimentNeutral'],3)})
             
     return jsonify({'positive': positive, 'negative': negative, 'neutral': neutral })
