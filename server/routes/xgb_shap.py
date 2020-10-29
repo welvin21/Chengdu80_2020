@@ -15,7 +15,7 @@ import time
 import ta
 from ta.volatility import BollingerBands
 from ta.trend import ADXIndicator
-from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
+from ta.momentum import UltimateOscgillator, RSIIndicator, StochasticOscillator
 import json
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
@@ -25,16 +25,12 @@ stocks = {}
 for ticker in transaction_data['TICKER'].unique():
     stock = transaction_data[transaction_data['TICKER'] == ticker]
     stocks[ticker] = stock
-<<<<<<< HEAD
-
+    
 stocks_industry = {}
 
 with open('../database/industry_info/stock_industry.json', 'r') as fp:
     stocks_industry = json.load(fp)
 
-=======
-    
->>>>>>> master
 @app.route('/stock-predictions', methods=['GET'])
 @cross_origin(supports_credentials=True)
 def get_stock_predictions():
@@ -97,10 +93,7 @@ def get_stock_predictions():
     predict_for = pd.DataFrame(X.iloc[date]).T
     print(predict_for)
 
-<<<<<<< HEAD
     # print(xgb.predict(X))
-=======
->>>>>>> master
     answer = xgb.predict_proba(predict_for)[0]
     prediction = xgb.predict(predict_for)[0]
     confidence = max(answer) * 100
