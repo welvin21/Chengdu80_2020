@@ -1,11 +1,7 @@
 import React from "react";
-import {
-  Switch,
-  Route,
-  useRouteMatch,
-} from "react-router-dom";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import { IndustryNavBar } from "./IndustryNavBar";
-import NoStock from "./NoStock";
+import { NoIndustry } from "./NoIndustry";
 import { IndustryTabs } from "../features/IndustryTabs";
 
 export const IndustryRoutes = () => {
@@ -14,8 +10,8 @@ export const IndustryRoutes = () => {
     <IndustryNavBar>
       <Switch>
         <Route exact path={`${match.url}/:industry`} component={IndustryTabs} />
-        <Route exact path={`${match.url}/`} component={NoStock} />
+        <Route exact path={`${match.url}/`} component={NoIndustry} />
       </Switch>
     </IndustryNavBar>
   );
-}
+};

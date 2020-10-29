@@ -9,10 +9,11 @@ import {
   Card,
   Typography,
 } from "antd";
+import { InfoCircleOutlined } from "@ant-design/icons";
 import { IndustryGraph } from "../components/IndustryGraph";
 import { usePrevious } from "../utility/hooks";
 import { IndustryStockGraph } from "../components/IndustryStockGraph";
-import { StockNodeAdjacentInfo } from '../components/StockNodeAdjacentsInfo';
+import { StockNodeAdjacentInfo } from "../components/StockNodeAdjacentsInfo";
 
 const { SHOW_PARENT } = TreeSelect;
 const { Title } = Typography;
@@ -52,14 +53,14 @@ export const IndustryGraphPage = ({ industry }) => {
       changeMetric: () => setMetric("spearman"),
     },
   ];
-  const onChange = (value) => {
+  const onChange = value => {
     if (isNaN(value)) {
       return;
     }
     setValueThreshold(value);
   };
 
-  const selectStocks = (value) => {
+  const selectStocks = value => {
     setSelectedStocks(value);
   };
 
@@ -88,8 +89,8 @@ export const IndustryGraphPage = ({ industry }) => {
       fetch(
         `http://localhost:5000/get-industry-graph?industry=${industry}&metric=${metric}`
       )
-        .then((response) => response.json())
-        .then((data) => {
+        .then(response => response.json())
+        .then(data => {
           const industryData = data;
           setIndustryData(data);
           const stocks = industryData.nodes.map(({ id }) => ({
@@ -99,7 +100,7 @@ export const IndustryGraphPage = ({ industry }) => {
           }));
           setStocksList(stocks);
           const filteredLinks = industryData.links.filter(
-            (item) =>
+            item =>
               Math.abs(item.label) > valueThreshold &&
               (selectedStocks.includes(item.source) ||
                 selectedStocks.includes(item.target))
@@ -109,7 +110,7 @@ export const IndustryGraphPage = ({ industry }) => {
             filteredNodes.add(source);
             filteredNodes.add(target);
           });
-          const filteredNodesArray = Array.from(filteredNodes).map((node) => ({
+          const filteredNodesArray = Array.from(filteredNodes).map(node => ({
             id: node,
           }));
           setData({
@@ -126,7 +127,7 @@ export const IndustryGraphPage = ({ industry }) => {
       }));
       setStocksList(stocks);
       const filteredLinks = industryData.links.filter(
-        (item) =>
+        item =>
           Math.abs(item.label) > valueThreshold &&
           (selectedStocks.includes(item.source) ||
             selectedStocks.includes(item.target))
@@ -136,7 +137,7 @@ export const IndustryGraphPage = ({ industry }) => {
         filteredNodes.add(source);
         filteredNodes.add(target);
       });
-      const filteredNodesArray = Array.from(filteredNodes).map((node) => ({
+      const filteredNodesArray = Array.from(filteredNodes).map(node => ({
         id: node,
       }));
       setData({
@@ -145,7 +146,6 @@ export const IndustryGraphPage = ({ industry }) => {
       });
       setLoading(false);
     }
-    
   }, [industry, valueThreshold, selectedStocks, metric, selectedNode]);
   return (
     <Row>
@@ -153,15 +153,22 @@ export const IndustryGraphPage = ({ industry }) => {
         <Card style={{ minHeight: "85vh", width: "100%" }}>
           <Row>
             <Col span={24}>
-            {metricButtons.map((button) => (
-              <Button
-                style={{ marginRight: "0em" }}
-                onClick={button.changeMetric}
-                type={button.value == metric ? "primary" : ""}
+              {metricButtons.map(button => (
+                <Button
+                  style={{ marginRight: "0em" }}
+                  onClick={button.changeMetric}
+                  type={button.value == metric ? "primary" : ""}
+                >
+                  {button.title}
+                </Button>
+              ))}
+              <Tooltip
+                placement="topLeft"
+                title="Different metrics for finding correlations, read more in glossary"
+                arrowPointAtCenter
               >
-                {button.title}
-              </Button>
-            ))}
+                <InfoCircleOutlined />
+              </Tooltip>
             </Col>
           </Row>
           <Row>
@@ -200,16 +207,33 @@ export const IndustryGraphPage = ({ industry }) => {
       </Col>
       <Col span={12}>
         <Row style={{ marginLeft: "1em" }}>
-          <div style={{ width: "100%", padding: "12px", backgroundColor: "#001628" }}>
-            <Title level={4} style={{ color: "white", margin: 0 }}>Correlation Analysis</Title>
+          <div
+            style={{
+              width: "100%",
+              padding: "12px",
+              backgroundColor: "#001628",
+            }}
+          >
+            <Title level={4} style={{ color: "white", margin: 0 }}>
+              Correlation Analysis
+            </Title>
           </div>
-          <div style={{ width: "100%", backgroundColor: "white", paddingTop: "8px" }}>
+          <div
+            style={{
+              width: "100%",
+              backgroundColor: "white",
+              paddingTop: "8px",
+            }}
+          >
             <IndustryStockGraph ticker={selectedLink.source} color="#4E2286" />
             <IndustryStockGraph ticker={selectedLink.target} color="#001628" />
-            <Title level={4} style={{ textAlign: "center" }}>Top 5 related firms {
-              selectedNode ? ` for ${selectedNode}` : ""
-            }</Title>
-            <StockNodeAdjacentInfo ticker={selectedNode} industryData={industryData}/>
+            <Title level={4} style={{ textAlign: "center" }}>
+              Top 5 related firms {selectedNode ? ` for ${selectedNode}` : ""}
+            </Title>
+            <StockNodeAdjacentInfo
+              ticker={selectedNode}
+              industryData={industryData}
+            />
           </div>
         </Row>
       </Col>
