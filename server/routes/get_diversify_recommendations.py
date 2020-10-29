@@ -5,6 +5,8 @@ import numpy as np
 import csv 
 import math
 
+allreturns = pd.read_csv(f"../database/industry_info/all_stocks_returns.csv", sep=',')
+
 def spearman_corr(first, second):
     return first.corr(second, method='spearman')
 
@@ -13,7 +15,6 @@ def get_diversify_recommendations():
     req_data = request.get_json() 
     portfolio = req_data['portfolio']
 
-    allreturns = pd.read_csv(f"../database/industry_info/all_stocks_returns.csv", sep=',')
     dates = allreturns['date']
     df = allreturns[portfolio]
 
