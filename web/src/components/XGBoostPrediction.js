@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Spin } from "antd";
+import { Typography } from "antd";
 
 const { Title, Text } = Typography;
 

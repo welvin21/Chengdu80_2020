@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Spin } from "antd";
+import React from "react";
 import { Graph } from "react-d3-graph";
 
 export const IndustryGraph = ({
