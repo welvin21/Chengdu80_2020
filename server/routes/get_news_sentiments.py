@@ -2,6 +2,8 @@ from app import app
 import pandas as pd
 from flask import request, jsonify
 
+df = pd.read_csv("../database/news_data.csv")
+
 @app.route('/get-news-sentiments')
 def get_news_sentiments():
     try:
@@ -9,8 +11,7 @@ def get_news_sentiments():
     except:
         return jsonify({})
 
-    news_df = pd.read_csv("../database/news_data.csv")
-    news_df = news_df[news_df['ticker'] == ticker]
+    news_df = df[df['ticker'] == ticker]
 
     positive, negative, neutral = [], [], []
 
