@@ -15,7 +15,7 @@ import time
 import ta
 from ta.volatility import BollingerBands
 from ta.trend import ADXIndicator
-from ta.momentum import UltimateOscgillator, RSIIndicator, StochasticOscillator
+from ta.momentum import UltimateOscillator, RSIIndicator, StochasticOscillator
 import json
 
 transaction_data = pd.read_csv('../datasets/transaction_data.tsv', sep='\t')
@@ -25,7 +25,7 @@ stocks = {}
 for ticker in transaction_data['TICKER'].unique():
     stock = transaction_data[transaction_data['TICKER'] == ticker]
     stocks[ticker] = stock
-    
+
 stocks_industry = {}
 
 with open('../database/industry_info/stock_industry.json', 'r') as fp:
