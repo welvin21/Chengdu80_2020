@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS, cross_origin
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../web/build", static_url_path="/")
 CORS(app, support_credentials=True)
 
 import routes.arima
@@ -18,5 +18,6 @@ import routes.get_news_headline_link
 
 @app.route('/')
 @cross_origin(supports_credentials=True)
-def entry(debug=True):
-    return 'server is running'
+def entry():
+    return app.send_static_file('index.html')
+    # return 'server is running'
