@@ -37,7 +37,7 @@ const columns = [
 export const NewsList = ({ ticker }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:5000/get-news-sentiments?ticker=${ticker}`)
+    fetch(`http://18.162.36.52:5000/get-news-sentiments?ticker=${ticker}`)
       .then(response => response.json())
       .then(data => {
         const negative = data["negative"];

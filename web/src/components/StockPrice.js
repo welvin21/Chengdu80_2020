@@ -32,7 +32,7 @@ export const StockPrice = ({ id }) => {
           : 0,
       }),
     };
-    fetch("http://localhost:5000/arima-forecast", requestOptions)
+    fetch("http://18.162.36.52:5000/arima-forecast", requestOptions)
       .then(response => response.json())
       .then(data => {
         const history = data["history"];

@@ -12,7 +12,7 @@ export const PortfolioStockCard = ({ ticker }) => {
   useEffect(() => {
     const getPredictionData = async () => {
       const response = await fetch(
-        `http://localhost:5000/stock-predictions?ticker=${ticker}`
+        `http://18.162.36.52:5000/stock-predictions?ticker=${ticker}`
       );
       const responseData = await response.json();
       setPredictionData(responseData);
@@ -21,7 +21,11 @@ export const PortfolioStockCard = ({ ticker }) => {
     getPredictionData();
   }, [ticker]);
   return (
-    <Card bordered={true} title={<Link to={`/stocks/${ticker}`}>{ticker}</Link>} style={{ textAlign: "left", marginBottom: "8px" }}>
+    <Card
+      bordered={true}
+      title={<Link to={`/stocks/${ticker}`}>{ticker}</Link>}
+      style={{ textAlign: "left", marginBottom: "8px" }}
+    >
       <IndustryStockGraph ticker={ticker} color="#4E2286" />
       <div
         style={{

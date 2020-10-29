@@ -1,5 +1,6 @@
 import React from "react";
 import { Tabs, Typography, Image, List } from "antd";
+import { useParams } from "react-router-dom";
 
 import { FeatureImportanceChart } from "../components";
 import { useRouteMatch, useLocation } from "react-router-dom";
@@ -10,6 +11,7 @@ const { Title } = Typography;
 const { TabPane } = Tabs;
 
 export const Interpretations = ({ featureImportances, descriptions }) => {
+  const { id } = useParams();
   const location = useLocation();
   console.log(descriptions);
   let data = [];
@@ -58,7 +60,7 @@ export const Interpretations = ({ featureImportances, descriptions }) => {
           />
         </TabPane>
         <TabPane tab="News" key="3">
-          <NewsList ticker="AAPL" />
+          <NewsList ticker={id} />
         </TabPane>
       </Tabs>
     </>
