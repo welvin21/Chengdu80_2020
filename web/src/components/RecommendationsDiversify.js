@@ -1,27 +1,30 @@
 import React from "react";
-import { Typography, Card, Avatar } from "antd";
+import { Typography, Card, Avatar, Affix } from "antd";
 import { SettingOutlined, EditOutlined, EllipsisOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 const { Meta } = Card;
 
-export const RecommendationsDiversify = () => {
+export const RecommendationsDiversify = ({ container }) => {
   return (
-    <div>
-      <div style={{ padding: "12px", backgroundColor: "#001628" }}>
-        <Title
-          level={4}
-          style={{ margin: 0, color: "white", textAlign: "left" }}
-        >
-          Recommendations to diversify your portfolio
-        </Title>
-      </div>
+    <div style={{ height: "100%" }}>
+      <Affix target={container}>
+        <div style={{ padding: "12px", backgroundColor: "#001628" }}>
+          <Title
+            level={4}
+            style={{ margin: 0, color: "white", textAlign: "left" }}
+          >
+            Recommendations to diversify your portfolio
+          </Title>
+        </div>
+      </Affix>
       <div
         style={{
           backgroundColor: "white",
           padding: "12px",
           display: "flex",
           alignItems: "baseline",
+          height: "100%"
         }}
       >
         <Card

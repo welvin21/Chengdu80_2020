@@ -1,37 +1,32 @@
-import React, { useContext } from "react";
-import { Row, Col, Card } from "antd";
+import React, { useState } from "react";
+import { Row, Col } from "antd";
 import { Portfolio } from "../components/Portfolio";
 import { RecommendationsDiversify } from "../components/RecommendationsDiversify";
 import { RecommendationsLongShort } from "../components/RecommendationsLongShort";
-import { PortfolioContext } from "../context";
 
 export const Dashboard = () => {
-  const { portfolio, setPortfolio } = useContext(PortfolioContext);
+  const [portfolioContainer, setPortfolioContainer] = useState(null);
+  const [longShortContainer, setLongShortContainer] = useState(null);
 
   return (
-    <Card
-      style={{
-        height: "100vh",
-        width: "80%",
-        marginLeft: "auto",
-        marginRight: "auto",
-      }}
-    >
-      <Row style={{ justifyContent: "center" }}>
-        <Col span={24}>
-          <RecommendationsDiversify />
-        </Col>
-      </Row>
-      <Row style={{ justifyContent: "center" }}>
-        <Col span={24}>
-          <RecommendationsLongShort />
-        </Col>
-      </Row>
-      <Row style={{ justifyContent: "center" }}>
-        <Col span={24}>
-          <Portfolio />
-        </Col>
-      </Row>
-    </Card>
+    <Row gutter={18} justify="space-between" style={{ padding: "12px 12px", height: "100%", margin: "0px !important" }}>
+      <Col span={8} style={{ 
+        height: "100%", 
+        boxSizing: "border-box", 
+        overflow: "auto", 
+        }} ref={setPortfolioContainer}>
+        <Portfolio container={portfolioContainer} />
+      </Col>
+      <Col span={8} style={{ 
+        height: "100%", 
+        boxSizing: "border-box", 
+        overflow: "auto", 
+        }} ref={setLongShortContainer}>
+        <RecommendationsLongShort container={longShortContainer} />
+      </Col>
+      <Col span={8} style={{ height: "100%", boxSizing: "border-box", overflow: "auto", padding: "8px" }}>
+        <RecommendationsDiversify />
+      </Col>
+    </Row>
   );
 };

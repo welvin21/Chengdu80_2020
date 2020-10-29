@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IndustryStockGraph } from "./IndustryStockGraph";
 import { Card, Typography } from "antd";
+import { Link } from "react-router-dom";
 
 const { Text } = Typography;
 
@@ -20,7 +21,7 @@ export const PortfolioStockCard = ({ ticker }) => {
     getPredictionData();
   }, [ticker]);
   return (
-    <Card bordered={true} style={{ width: "25%" }}>
+    <Card bordered={true} title={<Link to={`/stocks/${ticker}`}>{ticker}</Link>} style={{ textAlign: "left", marginBottom: "8px" }}>
       <IndustryStockGraph ticker={ticker} color="#4E2286" />
       <div
         style={{
