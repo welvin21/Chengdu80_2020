@@ -37,7 +37,7 @@ export const StockNodeAdjacentInfo = ({ ticker, industryData }) => {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Text strong style={{ fontSize: "20px", marginRight: "8px" }}>Negative:</Text>
         {
-          nodesList && nodesList.length > 0 && nodesList.slice(-5).reverse().map(stock => 
+          nodesList && nodesList.length > 0 && nodesList.slice(-5).reverse().filter(stock => stock.value < 0).map(stock => 
             <Link to={`/stocks/${stock.ticker}`}>
               <Tag style={{ marginRight: "8px", backgroundColor: "#001628", color: "white", cursor: "pointer" }}>
                 {`${stock.ticker} ${stock.value}`}
